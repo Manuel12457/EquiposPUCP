@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">EquiposPUCP</string>
+    <string name="hintSpinner">Rol</string>
+    <string-array name="roles">
+        <item>Alumno</item>
+        <item>Docente</item>
+        <item>Administrativo</item>
+    </string-array>
+</resources>
