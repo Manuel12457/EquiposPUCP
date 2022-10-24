@@ -30,7 +30,11 @@
         <activity
             android:name=".RegistrarUsuario"
             android:exported="false"
-            android:parentActivityName=".InicioSesion"/>
+            android:parentActivityName=".InicioSesion">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.equipospucp.InicioSesion" />
+        </activity>
         <activity
             android:name=".InicioSesion"
             android:exported="false"

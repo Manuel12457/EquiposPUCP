@@ -2,13 +2,16 @@ package com.example.equipospucp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class CodigoRegistrarUsuario extends AppCompatActivity {
@@ -91,5 +94,53 @@ public class CodigoRegistrarUsuario extends AppCompatActivity {
             intent.putExtra("exito", "Usted se ha registrado exitosamente");
             startActivity(intent);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(CodigoRegistrarUsuario.this);
+                builder.setMessage("¿Seguro que desea regresar a la pantalla de inicio? El código generado será invalidado y no se completará su registro");
+                builder.setPositiveButton("Aceptar",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Borrar codigo de db
+                                Intent intent = new Intent(CodigoRegistrarUsuario.this,MainActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                builder.setNegativeButton("Cancelar",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(CodigoRegistrarUsuario.this);
+        builder.setMessage("¿Seguro que desea regresar a la pantalla de inicio? El código generado será invalidado y no se completará su registro");
+        builder.setPositiveButton("Aceptar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Borrar codigo de db
+                        Intent intent = new Intent(CodigoRegistrarUsuario.this,MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        builder.setNegativeButton("Cancelar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
     }
 }
