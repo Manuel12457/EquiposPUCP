@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "858713223249",
+    "project_id": "equipospucp-8e679",
+    "storage_bucket": "equipospucp-8e679.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858713223249:android:9d3dbec23b9b3b4f868870",
+        "android_client_info": {
+          "package_name": "com.example.equipospucp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "858713223249-7ds841jef44ontf4rmd24578e6ufc0n9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN680QOBVNBkX_KIBLyuPp6Pb_Al9n3Go"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "858713223249-7ds841jef44ontf4rmd24578e6ufc0n9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

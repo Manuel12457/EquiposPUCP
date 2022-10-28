@@ -3,12 +3,27 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/drawable/ic_menu_camera.xml" value="0.1585" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.1585" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.1585" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/drawable/side_nav_bar.xml" value="0.1585" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/activity_cambio_contrasenia.xml" value="0.225" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/activity_codigo_cambio_contrasenia.xml" value="0.225" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/activity_codigo_registrar_usuario.xml" value="0.225" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/activity_inicio_sesion.xml" value="0.2" />
-        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/activity_listado_dispositivos.xml" value="0.264" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/activity_registrar_usuario.xml" value="0.225" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/app_bar_listado_dispositivos.xml" value="0.1" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/content_listado_dispositivos.xml" value="0.225" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/fragment_gallery.xml" value="0.225" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/fragment_slideshow.xml" value="0.225" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/header.xml" value="0.264" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/header1.xml" value="0.22395833333333334" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/nav_header_listado_dispositivos.xml" value="0.225" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/menu/activity_main_drawer.xml" value="0.225" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/menu/listado_dispositivos.xml" value="0.225" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/menu/navigation_drawer.xml" value="0.22395833333333334" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/mipmap-anydpi-v26/ic_equiposPUCP.xml" value="0.151" />
       </map>
     </option>

@@ -4,6 +4,7 @@
     package="com.example.equipospucp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -16,29 +17,35 @@
         android:theme="@style/TemaEquiposPUCP"
         tools:targetApi="31">
         <activity
+            android:name=".ListadoDispositivos"
+            android:theme="@style/TemaEquiposPUCP.NoActionBar"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".CodigoCambioContrasenia"
             android:exported="false"
-            android:parentActivityName=".InicioSesion"/>
+            android:parentActivityName=".InicioSesion" />
         <activity
             android:name=".CodigoRegistrarUsuario"
             android:exported="false"
-            android:parentActivityName=".InicioSesion"/>
+            android:parentActivityName=".InicioSesion" />
         <activity
             android:name=".CambioContrasenia"
             android:exported="false"
-            android:parentActivityName=".InicioSesion"/>
+            android:parentActivityName=".InicioSesion" />
         <activity
             android:name=".RegistrarUsuario"
             android:exported="false"
             android:parentActivityName=".InicioSesion">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.equipospucp.InicioSesion" />
+
+            <!-- <meta-data -->
+            <!-- android:name="android.support.PARENT_ACTIVITY" -->
+            <!-- android:value="com.example.equipospucp.InicioSesion" /> -->
         </activity>
         <activity
             android:name=".InicioSesion"
             android:exported="false"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

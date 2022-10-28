@@ -64,6 +64,8 @@ public class InicioSesion extends AppCompatActivity {
 
         if (correoValido && passwordValido) {
             Log.d("msg", "Correo ingresado: " + correo.getEditText().getText().toString() + " | Password ingresado: " + password.getEditText().getText().toString());
+            Intent intent = new Intent(this, ListadoDispositivos.class);
+            startActivity(intent);
         }
     }
 }
