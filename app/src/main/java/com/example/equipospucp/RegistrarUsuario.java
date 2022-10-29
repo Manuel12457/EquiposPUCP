@@ -18,10 +18,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 
+import com.example.equipospucp.DTOs.UsuarioDto;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrarUsuario extends AppCompatActivity {
+
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase;
 
     boolean codigoValido = true;
     boolean correoValido = true;
@@ -40,6 +53,9 @@ public class RegistrarUsuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar_usuario);
         getSupportActionBar().setTitle("Registro de usuario");
+
+        firebaseAuth = firebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
         TextInputLayout codigo = findViewById(R.id.inputCodigo_registro);
         codigo.getEditText().addTextChangedListener(new TextWatcher() {
@@ -152,10 +168,17 @@ public class RegistrarUsuario extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+
+                boolean longitudContrasenia = password.getEditText().getText().toString().length() >= 6;
                 if (password.isErrorEnabled()) {
                     if ((password.getEditText().getText().toString() != null && !password.getEditText().getText().toString().equals(""))) {
-                        password.setErrorEnabled(false);
-                        passwordValido = true;
+                        if (!longitudContrasenia) {
+                            codigo.setError("La longitud del código debe ser de mínimo 6 caracteres");
+                            passwordValido = false;
+                        } else {
+                            codigo.setErrorEnabled(false);
+                            passwordValido = true;
+                        }
                     } else {
                         password.setError("Ingrese su contraseña");
                         passwordValido = false;
@@ -210,6 +233,7 @@ public class RegistrarUsuario extends AppCompatActivity {
                 rol = spinner.getText().toString();
             }
         });
+
     }
 
     public String generarCodigo(int longitud) {
@@ -297,15 +321,55 @@ public class RegistrarUsuario extends AppCompatActivity {
         }
 
         if (codigoValido && correoValido && passwordValido && verifyPasswordValido && rolValido) {
-            //Datos mandarlos a la otra actividad para proceder con el registro
-            //Crear codigo y mandar correo
-            String codigoGenerado = generarCodigo(6);
-            SendEmailViewModel sendEmailViewModel = new ViewModelProvider(this).get(SendEmailViewModel.class);
-            sendEmailViewModel.enviarCorreo(correo.getEditText().getText().toString(), codigoGenerado);
+            Log.d("task", "Registro valido");
 
-            Intent intent = new Intent(this, CodigoRegistrarUsuario.class);
-            intent.putExtra("codigo", codigoGenerado);
-            startActivity(intent);
+            firebaseAuth.createUserWithEmailAndPassword(correo.getEditText().getText().toString(), password.getEditText().getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Log.d("task", "EXITO EN REGISTRO");
+
+                        //Guardar usuario en db
+                        DatabaseReference databaseReference = firebaseDatabase.getReference().child("usuarios").child(firebaseAuth.getCurrentUser().getUid());
+                        UsuarioDto usuarioDto = new UsuarioDto();
+                        usuarioDto.setCodigo(codigo.getEditText().getText().toString());
+                        usuarioDto.setRol(rol);
+                        usuarioDto.setCorreo(correo.getEditText().getText().toString());
+                        usuarioDto.setFoto("");
+                        databaseReference.setValue(usuarioDto)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("registro", "USUARIO GUARDADO");
+                            }
+                        })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("registro", "USUARIO NO GUARDADO - " + e.getMessage());
+                                    }
+                                });
+
+                        firebaseAuth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("task", "EXITO EN ENVIO DE CORREO DE VERIFICACION");
+                                Intent intent = new Intent(RegistrarUsuario.this, InicioSesion.class);
+                                intent.putExtra("exito", "Se ha registrado exitosamente. Verifique su cuenta por medio de un correo que se le ha enviado");
+                                startActivity(intent);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("task", "ERROR EN ENVIO DE CORREO DE VERIFICACION - " + e.getMessage());
+                            }
+                        });
+
+                    } else {
+                        Log.d("task", "ERROR EN REGISTRO - " + task.getException().getMessage());
+                    }
+                }
+            });
         }
     }
 

@@ -3,22 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
             <item
-                android:id="@+id/search_item"
+                android:id="@+id/profile_item"
                 android:checkable="true"
                 android:title="Ver perfil"
                 app:showAsAction="ifRoom" />
             <item
-                android:id="@+id/rotation_item"
+                android:id="@+id/devices_item"
                 android:title="Dispositivos"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
             <item
-                android:id="@+id/accelerator_item"
+                android:id="@+id/reservations_item"
                 android:title="Reservas"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>
             <item
-                android:id="@+id/dashboard_item"
+                android:id="@+id/logout_item"
                 android:title="Cerrar sesión"
                 android:checkable="true"
                 app:showAsAction="ifRoom"/>

@@ -22,14 +22,6 @@
             android:exported="false">
         </activity>
         <activity
-            android:name=".CodigoCambioContrasenia"
-            android:exported="false"
-            android:parentActivityName=".InicioSesion" />
-        <activity
-            android:name=".CodigoRegistrarUsuario"
-            android:exported="false"
-            android:parentActivityName=".InicioSesion" />
-        <activity
             android:name=".CambioContrasenia"
             android:exported="false"
             android:parentActivityName=".InicioSesion" />

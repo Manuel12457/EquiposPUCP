@@ -11,7 +11,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="160dp"
         android:text="Iniciar sesión"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,5 +74,14 @@
         app:layout_constraintEnd_toEndOf="@+id/btn_ingreso"
         app:layout_constraintStart_toStartOf="@+id/btn_ingreso"
         app:layout_constraintTop_toBottomOf="@+id/btn_ingreso" />
+
+    <TextView
+        android:id="@+id/infoUsuario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_cambioContrasenia"
+        app:layout_constraintStart_toStartOf="@+id/btn_cambioContrasenia"
+        app:layout_constraintTop_toBottomOf="@+id/btn_cambioContrasenia" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

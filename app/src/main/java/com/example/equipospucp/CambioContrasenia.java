@@ -1,5 +1,6 @@
 package com.example.equipospucp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -10,12 +11,20 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class CambioContrasenia extends AppCompatActivity {
 
     boolean correoValido = true;
     int vecesCorreo = 0;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +67,8 @@ public class CambioContrasenia extends AppCompatActivity {
                 }
             }
         });
+
+        firebaseAuth = firebaseAuth.getInstance();
     }
 
     public String generarCodigo(int longitud) {
@@ -96,13 +107,29 @@ public class CambioContrasenia extends AppCompatActivity {
 
         if (correoValido) {
             //Crear codigo y mandar correo
-            String codigo = generarCodigo(6);
-            SendEmailViewModel sendEmailViewModel = new ViewModelProvider(this).get(SendEmailViewModel.class);
-            sendEmailViewModel.enviarCorreo(correo.getEditText().getText().toString(), codigo);
+//            String codigo = generarCodigo(6);
+//            SendEmailViewModel sendEmailViewModel = new ViewModelProvider(this).get(SendEmailViewModel.class);
+//            sendEmailViewModel.enviarCorreo(correo.getEditText().getText().toString(), codigo);
 
-            Intent intent = new Intent(this, CodigoCambioContrasenia.class);
-            intent.putExtra("codigo", codigo);
-            startActivity(intent);
+//            Intent intent = new Intent(this, CodigoCambioContrasenia.class);
+//            intent.putExtra("codigo", codigo);
+//            startActivity(intent);
+
+            firebaseAuth.sendPasswordResetEmail(correo.getEditText().getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    //Esconder edittext y cambiar texto
+                    Log.d("forgetpsw", "Correo enviado para cambio de contrasenia");
+                    Intent intent = new Intent(CambioContrasenia.this, InicioSesion.class);
+                    intent.putExtra("exito", "Se le ha enviado un correo para proceder con la solicitud de cambio de contraseña");
+                    startActivity(intent);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("forgetpsw", "Ourrio un error - " + e.getMessage());
+                }
+            });
         }
     }
 }

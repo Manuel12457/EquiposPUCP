@@ -7,10 +7,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ListadoDispositivos extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -37,6 +41,31 @@ public class ListadoDispositivos extends AppCompatActivity implements Navigation
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.profile_item) {
+
+        } else if (item.getItemId() == R.id.devices_item) {
+
+        } else if (item.getItemId() == R.id.reservations_item) {
+
+        } else if (item.getItemId() == R.id.logout_item) {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(ListadoDispositivos.this);
+            builder.setMessage("¿Seguro que desea cerrar sesión?");
+            builder.setPositiveButton("Aceptar",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            FirebaseAuth.getInstance().signOut();
+                            Intent intent = new Intent(ListadoDispositivos.this,MainActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+            builder.setNegativeButton("Cancelar",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            builder.show();
+        }
         return false;
     }
 
