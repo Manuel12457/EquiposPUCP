@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditarDispositivo">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputCaracteristicas_nuevodispositivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Caracteristicas"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="302dp"
+            android:layout_height="50dp"
+            android:inputType="textLongMessage|text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputIncluye_nuevodispositivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Incluye"
+        app:layout_constraintEnd_toEndOf="@+id/inputCaracteristicas_nuevodispositivo"
+        app:layout_constraintStart_toStartOf="@+id/inputCaracteristicas_nuevodispositivo"
+        app:layout_constraintTop_toBottomOf="@+id/inputCaracteristicas_nuevodispositivo">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="302dp"
+            android:layout_height="50dp"
+            android:inputType="textLongMessage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputtipo_nuevodispositivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Tipo de dispositivo"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/spinner_tipo"
+        app:layout_constraintStart_toStartOf="@+id/spinner_tipo"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_tipo">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="302dp"
+            android:layout_height="50dp"
+            android:inputType="textShortMessage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputMarca_nuevodispositivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Marca"
+        app:layout_constraintEnd_toEndOf="@+id/inputtipo_nuevodispositivo"
+        app:layout_constraintStart_toStartOf="@+id/inputtipo_nuevodispositivo"
+        app:layout_constraintTop_toBottomOf="@+id/inputtipo_nuevodispositivo">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="302dp"
+            android:layout_height="50dp"
+            android:inputType="textShortMessage" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/spinner_tipo"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:hint="@string/hintSpinnerTipo"
+        app:layout_constraintEnd_toEndOf="@+id/textView6"
+        app:layout_constraintStart_toStartOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView6">
+
+        <AutoCompleteTextView
+            android:id="@+id/idTipo"
+            android:layout_width="302dp"
+            android:layout_height="50dp"
+            android:inputType="none"
+            app:simpleItems="@array/tipos" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="Nuevo dispositivo"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/textView11"
+        app:layout_constraintStart_toStartOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/textView11">
+
+        <ImageButton
+            android:id="@+id/minButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_minus" />
+
+        <TextView
+            android:id="@+id/textView_stock"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="number"
+            android:text="0"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/addButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_add" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Stock"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/inputMarca_nuevodispositivo"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/inputMarca_nuevodispositivo"
+        app:layout_constraintTop_toBottomOf="@+id/inputMarca_nuevodispositivo" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_guardardispositivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="validarRegistroDispositivo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_check" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

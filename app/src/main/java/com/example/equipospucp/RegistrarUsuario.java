@@ -1,11 +1,7 @@
 package com.example.equipospucp;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +23,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -355,7 +350,7 @@ public class RegistrarUsuario extends AppCompatActivity {
                             public void onSuccess(Void unused) {
                                 Log.d("task", "EXITO EN ENVIO DE CORREO DE VERIFICACION");
                                 Intent intent = new Intent(RegistrarUsuario.this, InicioSesion.class);
-                                intent.putExtra("exito", "Se ha registrado exitosamente. Verifique su cuenta por medio de un correo que se le ha enviado");
+                                intent.putExtra("exito", "Se ha enviado un correo para la verificación de su cuenta");
                                 startActivity(intent);
                             }
                         }).addOnFailureListener(new OnFailureListener() {

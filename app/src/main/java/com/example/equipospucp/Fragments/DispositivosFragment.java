@@ -1,10 +1,12 @@
 package com.example.equipospucp.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,7 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.equipospucp.Adapters.ListaTipoDispositivoAdapter;
 import com.example.equipospucp.DTOs.DispositivoDto;
 import com.example.equipospucp.DTOs.TipoDispositivoDto;
+import com.example.equipospucp.EditarDispositivo;
 import com.example.equipospucp.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,6 +50,24 @@ public class DispositivosFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dispositivos_fragment,container,false);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String mensaje_exito = bundle.getString("exito");
+            if (mensaje_exito != null && !mensaje_exito.equals("")) {
+                Snackbar.make(view.findViewById(R.id.id_dispositivosFragment), mensaje_exito, Snackbar.LENGTH_LONG).show();
+            }
+        }
+
+        FloatingActionButton button = view.findViewById(R.id.fab_nuevodispositivo);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), EditarDispositivo.class);
+                intent.putExtra("accion", "nuevo");
+                startActivity(intent);
+            }
+        });
 
         databaseReference = FirebaseDatabase.getInstance().getReference("dispositivos");
 
@@ -79,21 +102,24 @@ public class DispositivosFragment extends Fragment {
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (snapshot.exists()) { //Nodo referente existe
                 listaTipoDispositivos.clear();
+                listaMarcasLaptop.clear();
+                listaMarcasMonitor.clear();
+                listaMarcasCelular.clear();
+                listaMarcasTablet.clear();
+                listaMarcasOtro.clear();
 
-                listaTipoDispositivos.add(new TipoDispositivoDto("Laptops",0,0));
-                listaTipoDispositivos.add(new TipoDispositivoDto("Monitores",0,0));
-                listaTipoDispositivos.add(new TipoDispositivoDto("Celulares",0,0));
-                listaTipoDispositivos.add(new TipoDispositivoDto("Tablets",0,0));
-                listaTipoDispositivos.add(new TipoDispositivoDto("Otros",0,0));
+                listaTipoDispositivos.add(new TipoDispositivoDto("Laptops",0,0, listaMarcasLaptop));
+                listaTipoDispositivos.add(new TipoDispositivoDto("Monitores",0,0, listaMarcasMonitor));
+                listaTipoDispositivos.add(new TipoDispositivoDto("Celulares",0,0, listaMarcasCelular));
+                listaTipoDispositivos.add(new TipoDispositivoDto("Tablets",0,0, listaMarcasTablet));
+                listaTipoDispositivos.add(new TipoDispositivoDto("Otros",0,0, listaMarcasOtro));
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     DispositivoDto dispositivo = ds.getValue(DispositivoDto.class);
-                    System.out.println(dispositivo.getTipo().equals("Laptop"));
                     if (dispositivo.getTipo().equals("Laptop")) {
                         TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(0);
                         tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
 
-                        //System.out.println(listaMarcasLaptop.isEmpty());
                         if (listaMarcasLaptop.isEmpty()) {
                             tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                             listaMarcasLaptop.add(dispositivo.getMarca());
@@ -102,8 +128,11 @@ public class DispositivosFragment extends Fragment {
                                 tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                                 listaMarcasLaptop.add(dispositivo.getMarca());
                             }
+//                            else {
+//                                tipodispositivo.setCantidadMarcas(tipodispositivo.getListaMarcas().size());
+//                            }
                         }
-                        System.out.println(tipodispositivo.getCantidadMarcas());
+                        tipodispositivo.setListaMarcas(listaMarcasLaptop);
 
                     } else if (dispositivo.getTipo().equals("Monitor")) {
                         TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(1);
@@ -117,7 +146,11 @@ public class DispositivosFragment extends Fragment {
                                 tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                                 listaMarcasMonitor.add(dispositivo.getMarca());
                             }
+//                            else {
+//                                tipodispositivo.setCantidadMarcas(tipodispositivo.getListaMarcas().size());
+//                            }
                         }
+                        tipodispositivo.setListaMarcas(listaMarcasMonitor);
                     } else if (dispositivo.getTipo().equals("Celular")) {
                         TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(2);
                         tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
@@ -130,7 +163,11 @@ public class DispositivosFragment extends Fragment {
                                 tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                                 listaMarcasCelular.add(dispositivo.getMarca());
                             }
+//                            else {
+//                                tipodispositivo.setCantidadMarcas(tipodispositivo.getListaMarcas().size());
+//                            }
                         }
+                        tipodispositivo.setListaMarcas(listaMarcasCelular);
                     } else if (dispositivo.getTipo().equals("Tablet")) {
                         TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(3);
                         tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
@@ -143,7 +180,11 @@ public class DispositivosFragment extends Fragment {
                                 tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                                 listaMarcasTablet.add(dispositivo.getMarca());
                             }
+//                            else {
+//                                tipodispositivo.setCantidadMarcas(tipodispositivo.getListaMarcas().size());
+//                            }
                         }
+                        tipodispositivo.setListaMarcas(listaMarcasTablet);
                     } else {
                         TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(4);
                         tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
@@ -156,7 +197,11 @@ public class DispositivosFragment extends Fragment {
                                 tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                                 listaMarcasOtro.add(dispositivo.getMarca());
                             }
+//                            else {
+//                                tipodispositivo.setCantidadMarcas(tipodispositivo.getListaMarcas().size());
+//                            }
                         }
+                        tipodispositivo.setListaMarcas(listaMarcasOtro);
                     }
                 }
 

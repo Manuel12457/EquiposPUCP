@@ -2,10 +2,18 @@
     <string name="app_name">EquiposPUCP</string>
     <string name="hintSpinner">Rol</string>
     <string name="hintSpinnerMarca">Marca</string>
+    <string name="hintSpinnerTipo">Tipo</string>
     <string-array name="roles">
         <item>Alumno</item>
         <item>Docente</item>
         <item>Administrativo</item>
+    </string-array>
+    <string-array name="tipos">
+        <item>Laptop</item>
+        <item>Monitor</item>
+        <item>Celular</item>
+        <item>Tablet</item>
+        <item>Otro</item>
     </string-array>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

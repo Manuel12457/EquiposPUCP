@@ -87,6 +87,13 @@ public class ListaTipoDispositivoAdapter extends RecyclerView.Adapter<ListaTipoD
                 } else {
                     bundle.putString("tipo", "Otro");
                 }
+
+                ArrayList<String> a = new ArrayList<>();
+                a.add("Todas las marcas");
+                for (String s : tipodispositivo.getListaMarcas()) {
+                    a.add(s);
+                }
+                bundle.putStringArrayList("marcas", a);
                 DispositivosPorTipoFragment dispositivosPorTipoFragment = new DispositivosPorTipoFragment();
                 dispositivosPorTipoFragment.setArguments(bundle);
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment, dispositivosPorTipoFragment).addToBackStack(null).commit();

@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
-            android:id="@+id/idRol"
+            android:id="@+id/idMarca"
             android:layout_width="302dp"
             android:layout_height="50dp"
             android:inputType="none" />

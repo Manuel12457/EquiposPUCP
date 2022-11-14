@@ -19,6 +19,7 @@ import com.example.equipospucp.Fragments.ProfileFragment;
 import com.example.equipospucp.Fragments.ReservasFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Drawer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -39,6 +40,11 @@ public class Drawer extends AppCompatActivity implements NavigationView.OnNaviga
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Dispositivos");
+
+        String mensaje_exito = getIntent().getStringExtra("exito");
+        if (mensaje_exito != null && !mensaje_exito.equals("")) {
+            Snackbar.make(findViewById(R.id.id_drawer), mensaje_exito, Snackbar.LENGTH_LONG).show();
+        }
 
         drawerLayout = findViewById(R.id.drawer);
         navigationView = findViewById(R.id.navigationView);
