@@ -1,6 +1,7 @@
 package com.example.equipospucp;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -13,8 +14,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.equipospucp.DTOs.DispositivoDto;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
