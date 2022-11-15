@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.equipospucp.Adapters.ListaDispositivoAdapter;
+import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.DispositivoDto;
 import com.example.equipospucp.R;
 import com.google.android.material.textfield.TextInputLayout;
@@ -30,15 +32,21 @@ import java.util.ArrayList;
 
 public class DispositivosPorTipoFragment extends Fragment {
 
-    RecyclerView recyclerView;
     DatabaseReference databaseReference;
+    Query query;
     ListaDispositivoAdapter adapter;
     ValueEventListener valueEventListener;
-    Query query;
-    ArrayList<DispositivoDto> listaDispositivos;
+
+    ArrayList<DispositivoDetalleDto> listaDispositivos;
     String tipo;
     ArrayList<String> marcas;
     String marca;
+
+    RecyclerView recyclerView;
+    TextInputLayout spinnera;
+    TextView noregistro;
+
+    Boolean pestaniaOtros;
 
     @Nullable
     @Override
@@ -48,6 +56,10 @@ public class DispositivosPorTipoFragment extends Fragment {
         tipo = bundle.getString("tipo");
         marcas = bundle.getStringArrayList("marcas");
 
+        pestaniaOtros = !(tipo.equals("Laptop") || tipo.equals("Monitor") || tipo.equals("Celular") || tipo.equals("Tablet") || tipo.equals("Laptop"));
+
+        noregistro = view.findViewById(R.id.textView7);
+        spinnera = view.findViewById(R.id.spinner_marca);
         recyclerView = view.findViewById(R.id.recyclerView_dispositivos);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -64,7 +76,6 @@ public class DispositivosPorTipoFragment extends Fragment {
         spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TextInputLayout spinnera = view.findViewById(R.id.spinner_marca);
                 marca = spinner.getText().toString();
 
                 if (marca.equals("Todas las marcas")) {
@@ -89,11 +100,30 @@ public class DispositivosPorTipoFragment extends Fragment {
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     DispositivoDto dispositivo = ds.getValue(DispositivoDto.class);
-                    if (dispositivo.getTipo().equals(tipo)) {
-                        listaDispositivos.add(dispositivo);
+                    DispositivoDetalleDto dispositivoDetalle = new DispositivoDetalleDto();
+                    dispositivoDetalle.setDispositivoDto(dispositivo);
+                    dispositivoDetalle.setId(ds.getKey());
+
+                    if (pestaniaOtros) {
+                        if (!dispositivo.getTipo().equals("Laptop") && !dispositivo.getTipo().equals("Monitor") && !dispositivo.getTipo().equals("Celular") && !dispositivo.getTipo().equals("Tablet")) {
+                            listaDispositivos.add(dispositivoDetalle);
+                        }
+                    } else {
+                        if (dispositivo.getTipo().equals(tipo)) {
+                            listaDispositivos.add(dispositivoDetalle);
+                        }
                     }
                 }
 
+                if (listaDispositivos.isEmpty()) {
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    spinnera.setVisibility(View.INVISIBLE);
+                    noregistro.setVisibility(View.VISIBLE);
+                } else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    spinnera.setVisibility(View.VISIBLE);
+                    noregistro.setVisibility(View.INVISIBLE);
+                }
                 adapter.notifyDataSetChanged();
             } else {
             listaDispositivos.clear();

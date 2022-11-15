@@ -35,6 +35,8 @@ public class EditarDispositivo extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
 
+    boolean tipoNuevoValido = true;
+
     boolean tipoValido = true;
     boolean marcaValido = true;
     boolean stockValido = true;
@@ -84,14 +86,20 @@ public class EditarDispositivo extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
 
                 if (marca.isErrorEnabled()) {
-                    if (!(marca.getEditText().getText().toString() != null && !marca.getEditText().getText().toString().equals(""))) {
+                    if ((marca.getEditText().getText().toString() != null && !marca.getEditText().getText().toString().equals(""))) {
+                        marca.setErrorEnabled(false);
+                        marcaValido = true;
+                    } else {
                         marca.setError("Ingrese una marca");
                         marcaValido = false;
                     }
                 }
 
                 if (!marca.isErrorEnabled() && vecesmarca != 0) {
-                    if (!(marca.getEditText().getText().toString() != null && !marca.getEditText().getText().toString().equals(""))) {
+                    if ((marca.getEditText().getText().toString() != null && !marca.getEditText().getText().toString().equals(""))) {
+                        marca.setErrorEnabled(false);
+                        marcaValido = true;
+                    } else {
                         marca.setError("Ingrese una marca");
                         marcaValido = false;
                     }
@@ -100,7 +108,7 @@ public class EditarDispositivo extends AppCompatActivity {
         });
 
         TextInputLayout caracteristicas = findViewById(R.id.inputCaracteristicas_nuevodispositivo);
-        marca.getEditText().addTextChangedListener(new TextWatcher() {
+        caracteristicas.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -115,14 +123,20 @@ public class EditarDispositivo extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
 
                 if (caracteristicas.isErrorEnabled()) {
-                    if (!(caracteristicas.getEditText().getText().toString() != null && !caracteristicas.getEditText().getText().toString().equals(""))) {
+                    if ((caracteristicas.getEditText().getText().toString() != null && !caracteristicas.getEditText().getText().toString().equals(""))) {
+                        caracteristicas.setErrorEnabled(false);
+                        caracteristicasValido = true;
+                    } else {
                         caracteristicas.setError("Ingrese las características");
                         caracteristicasValido = false;
                     }
                 }
 
                 if (!caracteristicas.isErrorEnabled() && vecescaracteristicas != 0) {
-                    if (!(caracteristicas.getEditText().getText().toString() != null && !caracteristicas.getEditText().getText().toString().equals(""))) {
+                    if ((caracteristicas.getEditText().getText().toString() != null && !caracteristicas.getEditText().getText().toString().equals(""))) {
+                        caracteristicas.setErrorEnabled(false);
+                        caracteristicasValido = true;
+                    } else {
                         caracteristicas.setError("Ingrese las características");
                         caracteristicasValido = false;
                     }
@@ -131,7 +145,7 @@ public class EditarDispositivo extends AppCompatActivity {
         });
 
         TextInputLayout incluye = findViewById(R.id.inputIncluye_nuevodispositivo);
-        marca.getEditText().addTextChangedListener(new TextWatcher() {
+        incluye.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -146,14 +160,20 @@ public class EditarDispositivo extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
 
                 if (incluye.isErrorEnabled()) {
-                    if (!(incluye.getEditText().getText().toString() != null && !incluye.getEditText().getText().toString().equals(""))) {
+                    if ((incluye.getEditText().getText().toString() != null && !incluye.getEditText().getText().toString().equals(""))) {
+                        incluye.setErrorEnabled(false);
+                        incluyeValido = true;
+                    } else {
                         incluye.setError("Ingrese lo que incluye el dispositivo");
                         incluyeValido = false;
                     }
                 }
 
                 if (!incluye.isErrorEnabled() && vecesincluye != 0) {
-                    if (!(incluye.getEditText().getText().toString() != null && !incluye.getEditText().getText().toString().equals(""))) {
+                    if ((incluye.getEditText().getText().toString() != null && !incluye.getEditText().getText().toString().equals(""))) {
+                        incluye.setErrorEnabled(false);
+                        incluyeValido = true;
+                    } else {
                         incluye.setError("Ingrese lo que incluye el dispositivo");
                         incluyeValido = false;
                     }
@@ -163,7 +183,7 @@ public class EditarDispositivo extends AppCompatActivity {
 
         //Agregar condicion de tiposeleccionado == "Otro"
         TextInputLayout tipo = findViewById(R.id.inputtipo_nuevodispositivo);
-        marca.getEditText().addTextChangedListener(new TextWatcher() {
+        tipo.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -179,20 +199,27 @@ public class EditarDispositivo extends AppCompatActivity {
 
                 if (otroselected) {
                     if (tipo.isErrorEnabled()) {
-                        if (!(tipo.getEditText().getText().toString() != null && !tipo.getEditText().getText().toString().equals(""))) {
-                            tipo.setError("Ingrese el tipo de dispositivo");
-                            tipoValido = false;
+                        if ((tipo.getEditText().getText().toString() != null && !tipo.getEditText().getText().toString().equals(""))) {
+                            tipo.setErrorEnabled(false);
+                            tipoNuevoValido = true;
+                        } else {
+                            incluye.setError("Ingrese el tipo de dispositivo");
+                            tipoNuevoValido = false;
                         }
                     }
 
                     if (!tipo.isErrorEnabled() && vecestipo != 0) {
-                        if (!(tipo.getEditText().getText().toString() != null && !tipo.getEditText().getText().toString().equals(""))) {
+                        if ((tipo.getEditText().getText().toString() != null && !tipo.getEditText().getText().toString().equals(""))) {
+                            tipo.setErrorEnabled(false);
+                            tipoNuevoValido = true;
+                        } else {
                             tipo.setError("Ingrese el tipo de dispositivo");
-                            tipoValido = false;
+                            tipoNuevoValido = false;
                         }
                     }
                 } else {
-                    tipoValido = true;
+                    tipo.setErrorEnabled(false);
+                    tipoNuevoValido = true;
                 }
             }
         });
@@ -240,10 +267,14 @@ public class EditarDispositivo extends AppCompatActivity {
 
     //MODIFICAR
     public void validarRegistroDispositivo(View view) {
+
+        Log.d("seleccionado", "Seleccionado Otro: " + otroselected);
+
         TextInputLayout tipo = findViewById(R.id.inputtipo_nuevodispositivo);
         TextInputLayout marca = findViewById(R.id.inputMarca_nuevodispositivo);
         TextInputLayout caracteristicas = findViewById(R.id.inputCaracteristicas_nuevodispositivo);
         TextInputLayout incluye = findViewById(R.id.inputIncluye_nuevodispositivo);
+        TextView errorStock = findViewById(R.id.stockInvalido);
 
         TextView stock = findViewById(R.id.textView_stock);
 
@@ -255,10 +286,10 @@ public class EditarDispositivo extends AppCompatActivity {
             } else {
                 vecestipo++;
                 tipo.setError("Ingrese el tipo de dispositivo");
-                tipoValido = false;
+                tipoNuevoValido = false;
             }
         } else {
-            tipoValido = true;
+            tipoNuevoValido = true;
         }
 
         if (marca.getEditText().getText().toString() != null && !marca.getEditText().getText().toString().equals("")) {
@@ -294,8 +325,10 @@ public class EditarDispositivo extends AppCompatActivity {
         if (Integer.parseInt(stock.getText().toString()) == 0) {
             stockValido = false;
             Log.d("msg", "VALOR STOCK IGUAL 0");
+            errorStock.setVisibility(View.VISIBLE);
         } else {
             stockValido = true;
+            errorStock.setVisibility(View.GONE);
             Log.d("msg", "VALOR STOCK DIFERENTE DE 0");
         }
 
@@ -305,7 +338,9 @@ public class EditarDispositivo extends AppCompatActivity {
             spinner.setError("Seleccione un tipo de dispositivo");
         }
 
-        if (tipoValido && marcaValido && caracteristicasValido && incluyeValido && stockValido) {
+        Log.d("seleccionado", "tipoValido: " + tipoNuevoValido);
+
+        if (tipoValido && marcaValido && caracteristicasValido && incluyeValido && stockValido && tipoNuevoValido) {
             Log.d("task", "Registro valido");
 
             //Guardar usuario en db

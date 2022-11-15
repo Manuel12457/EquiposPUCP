@@ -1,6 +1,8 @@
 package com.example.equipospucp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,20 +10,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.DispositivoDto;
 import com.example.equipospucp.DTOs.TipoDispositivoDto;
+import com.example.equipospucp.DetallesDispositivo;
+import com.example.equipospucp.Drawer;
+import com.example.equipospucp.EditarDispositivo;
+import com.example.equipospucp.Fragments.DispositivosPorTipoFragment;
 import com.example.equipospucp.R;
 
 import java.util.ArrayList;
 
 public class ListaDispositivoAdapter extends RecyclerView.Adapter<ListaDispositivoAdapter.ListaDispositivosViewHolder> {
 
-    private ArrayList<DispositivoDto> listaDispositivos;
+    private ArrayList<DispositivoDetalleDto> listaDispositivos;
     private Context context;
 
-    public ListaDispositivoAdapter(ArrayList<DispositivoDto> listaDispositivos, Context context) {
+    public ListaDispositivoAdapter(ArrayList<DispositivoDetalleDto> listaDispositivos, Context context) {
         this.setListaDispositivos(listaDispositivos);
         this.context = context;
     }
@@ -34,11 +42,11 @@ public class ListaDispositivoAdapter extends RecyclerView.Adapter<ListaDispositi
         this.context = context;
     }
 
-    public ArrayList<DispositivoDto> getListaDispositivos() {
+    public ArrayList<DispositivoDetalleDto> getListaDispositivos() {
         return listaDispositivos;
     }
 
-    public void setListaDispositivos(ArrayList<DispositivoDto> listaDispositivos) {
+    public void setListaDispositivos(ArrayList<DispositivoDetalleDto> listaDispositivos) {
         this.listaDispositivos = listaDispositivos;
     }
 
@@ -52,21 +60,30 @@ public class ListaDispositivoAdapter extends RecyclerView.Adapter<ListaDispositi
     @Override
     public void onBindViewHolder(@NonNull ListaDispositivosViewHolder holder, int position) {
 
-        DispositivoDto dispositivo = getListaDispositivos().get(position);
+        DispositivoDetalleDto dispositivo = getListaDispositivos().get(position);
         //Cambiarlo por imagen en firebase db. Colocar imagen por defecto si no posee
-        if (dispositivo.getTipo().equals("Laptops")) {
+        if (dispositivo.getDispositivoDto().getTipo().equals("Laptops")) {
             holder.imageView.setImageResource(R.drawable.ic_laptop);
-        } else if (dispositivo.getTipo().equals("Monitores")) {
+        } else if (dispositivo.getDispositivoDto().getTipo().equals("Monitores")) {
             holder.imageView.setImageResource(R.drawable.ic_monitor);
-        } else if (dispositivo.getTipo().equals("Celulares")) {
+        } else if (dispositivo.getDispositivoDto().getTipo().equals("Celulares")) {
             holder.imageView.setImageResource(R.drawable.ic_celular);
-        } else if (dispositivo.getTipo().equals("Tablets")) {
+        } else if (dispositivo.getDispositivoDto().getTipo().equals("Tablets")) {
             holder.imageView.setImageResource(R.drawable.ic_tablet);
         } else {
             holder.imageView.setImageResource(R.drawable.ic_otros);
         }
-        holder.textView.setText(dispositivo.getMarca() + "\n" + "Stock: " + dispositivo.getStock());
+        holder.textView.setText(dispositivo.getDispositivoDto().getTipo() + " " + dispositivo.getDispositivoDto().getMarca() + "\n" + "Stock: " + dispositivo.getDispositivoDto().getStock());
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), DetallesDispositivo.class);
+                intent.putExtra("id", dispositivo.getId());
+                intent.putExtra("tipo", dispositivo.getDispositivoDto().getTipo());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

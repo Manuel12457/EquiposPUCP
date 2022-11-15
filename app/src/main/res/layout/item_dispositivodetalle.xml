@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="30dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="30dp"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imageView_dispositivodetalle"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_otros" />
+
+    <TextView
+        android:id="@+id/textView_marcastockreservas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Marca: Lenovo\nStock: 20\nEquipos reservados: 2"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/textView_incluye"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:text="Incluye:\n\tCargador Estuche protector\n\tMouse inalámbrico "
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView_caracteristicas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1"
+        android:text="Características:\n\tMicrosoft Word instalado"
+        android:textSize="16sp" />
+</LinearLayout>

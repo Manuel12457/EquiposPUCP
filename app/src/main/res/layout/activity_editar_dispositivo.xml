@@ -12,9 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="Caracteristicas"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintEnd_toEndOf="@+id/stockInvalido"
+        app:layout_constraintStart_toStartOf="@+id/stockInvalido"
+        app:layout_constraintTop_toBottomOf="@+id/stockInvalido">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="302dp"
@@ -96,7 +96,7 @@
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="40dp"
         android:text="Nuevo dispositivo"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -119,7 +119,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_minus" />
 
@@ -143,7 +142,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_add" />
 
@@ -153,7 +151,7 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:text="Stock"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/inputMarca_nuevodispositivo"
@@ -173,5 +171,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_check" />
+
+    <TextView
+        android:id="@+id/stockInvalido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="El stock debe ser mayor a 0"
+        android:textColor="#DD4141"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
