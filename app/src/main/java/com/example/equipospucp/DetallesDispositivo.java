@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,10 @@ import com.example.equipospucp.Adapters.ListaTipoDispositivoAdapter;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.DispositivoDto;
 import com.example.equipospucp.Fragments.DispositivosFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,6 +59,69 @@ public class DetallesDispositivo extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         valueEventListener = databaseReference.addValueEventListener(new listener());
+
+        FloatingActionButton editar = findViewById(R.id.editarDispositivo);
+        editar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("tamanio", String.valueOf(listaDispositivos.size()));
+                Intent intent = new Intent(DetallesDispositivo.this, EditarDispositivo.class);
+                intent.putExtra("accion", "editar");
+                intent.putExtra("dispositivo", listaDispositivos.get(0));
+                startActivity(intent);
+            }
+        });
+
+        FloatingActionButton eliminar = findViewById(R.id.eliminarDispositivo);
+        eliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(DetallesDispositivo.this);
+                builder.setMessage("¿Seguro que quiere eliminar el dispositivo?");
+                builder.setPositiveButton("Aceptar",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("dispositivos");
+                                DispositivoDto dispositivoDto = new DispositivoDto();
+
+                                dispositivoDto.setTipo(listaDispositivos.get(0).getDispositivoDto().getTipo());
+                                dispositivoDto.setFoto("");
+                                dispositivoDto.setMarca(listaDispositivos.get(0).getDispositivoDto().getMarca());
+                                dispositivoDto.setCaracteristicas(listaDispositivos.get(0).getDispositivoDto().getCaracteristicas());
+                                dispositivoDto.setIncluye(listaDispositivos.get(0).getDispositivoDto().getIncluye());
+                                dispositivoDto.setStock(listaDispositivos.get(0).getDispositivoDto().getStock());
+                                dispositivoDto.setVisible(false);
+
+                                databaseReference.child(listaDispositivos.get(0).getId()).setValue(dispositivoDto)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Log.d("registro", "DISPOSITIVO GUARDADO");
+                                                Intent intent = new Intent(DetallesDispositivo.this,Drawer.class);
+                                                intent.putExtra("exito", "El dispositivo se ha eliminado exitosamente");
+                                                startActivity(intent);
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d("registro", "DISPOSITIVO NO GUARDADO - " + e.getMessage());
+                                            }
+                                        });
+
+
+                            }
+                        });
+                builder.setNegativeButton("Cancelar",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.show();
+            }
+        });
     }
 
     class listener implements ValueEventListener {
@@ -68,7 +137,9 @@ public class DetallesDispositivo extends AppCompatActivity {
                         DispositivoDetalleDto dispositivoDetalle = new DispositivoDetalleDto();
                         dispositivoDetalle.setDispositivoDto(dispositivo);
                         dispositivoDetalle.setId(ds.getKey());
-                        listaDispositivos.add(dispositivoDetalle);
+                        if (dispositivo.getVisible()) {
+                            listaDispositivos.add(dispositivoDetalle);
+                        }
                     }
                 }
                 adapter.notifyDataSetChanged();

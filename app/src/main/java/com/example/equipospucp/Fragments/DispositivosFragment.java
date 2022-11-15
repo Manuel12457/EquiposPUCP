@@ -116,92 +116,94 @@ public class DispositivosFragment extends Fragment {
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     DispositivoDto dispositivo = ds.getValue(DispositivoDto.class);
-                    if (dispositivo.getTipo().equals("Laptop")) {
-                        TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(0);
-                        tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
+                    if (dispositivo.getVisible()) {
+                        if (dispositivo.getTipo().equals("Laptop")) {
+                            TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(0);
+                            tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
 
-                        if (listaMarcasLaptop.isEmpty()) {
-                            tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
-                            listaMarcasLaptop.add(dispositivo.getMarca());
-                        } else {
-                            if (!listaMarcasLaptop.contains(dispositivo.getMarca())) {
+                            if (listaMarcasLaptop.isEmpty()) {
                                 tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                                 listaMarcasLaptop.add(dispositivo.getMarca());
-                            }
+                            } else {
+                                if (!listaMarcasLaptop.contains(dispositivo.getMarca())) {
+                                    tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
+                                    listaMarcasLaptop.add(dispositivo.getMarca());
+                                }
 //                            else {
 //                                tipodispositivo.setCantidadMarcas(tipodispositivo.getListaMarcas().size());
 //                            }
-                        }
-                        tipodispositivo.setListaMarcas(listaMarcasLaptop);
+                            }
+                            tipodispositivo.setListaMarcas(listaMarcasLaptop);
 
-                    } else if (dispositivo.getTipo().equals("Monitor")) {
-                        TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(1);
-                        tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
+                        } else if (dispositivo.getTipo().equals("Monitor")) {
+                            TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(1);
+                            tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
 
-                        if (listaMarcasMonitor.isEmpty()) {
-                            tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
-                            listaMarcasMonitor.add(dispositivo.getMarca());
-                        } else {
-                            if (!listaMarcasMonitor.contains(dispositivo.getMarca())) {
+                            if (listaMarcasMonitor.isEmpty()) {
                                 tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                                 listaMarcasMonitor.add(dispositivo.getMarca());
-                            }
+                            } else {
+                                if (!listaMarcasMonitor.contains(dispositivo.getMarca())) {
+                                    tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
+                                    listaMarcasMonitor.add(dispositivo.getMarca());
+                                }
 //                            else {
 //                                tipodispositivo.setCantidadMarcas(tipodispositivo.getListaMarcas().size());
 //                            }
-                        }
-                        tipodispositivo.setListaMarcas(listaMarcasMonitor);
-                    } else if (dispositivo.getTipo().equals("Celular")) {
-                        TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(2);
-                        tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
+                            }
+                            tipodispositivo.setListaMarcas(listaMarcasMonitor);
+                        } else if (dispositivo.getTipo().equals("Celular")) {
+                            TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(2);
+                            tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
 
-                        if (listaMarcasCelular.isEmpty()) {
-                            tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
-                            listaMarcasCelular.add(dispositivo.getMarca());
-                        } else {
-                            if (!listaMarcasCelular.contains(dispositivo.getMarca())) {
+                            if (listaMarcasCelular.isEmpty()) {
                                 tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                                 listaMarcasCelular.add(dispositivo.getMarca());
-                            }
+                            } else {
+                                if (!listaMarcasCelular.contains(dispositivo.getMarca())) {
+                                    tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
+                                    listaMarcasCelular.add(dispositivo.getMarca());
+                                }
 //                            else {
 //                                tipodispositivo.setCantidadMarcas(tipodispositivo.getListaMarcas().size());
 //                            }
-                        }
-                        tipodispositivo.setListaMarcas(listaMarcasCelular);
-                    } else if (dispositivo.getTipo().equals("Tablet")) {
-                        TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(3);
-                        tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
+                            }
+                            tipodispositivo.setListaMarcas(listaMarcasCelular);
+                        } else if (dispositivo.getTipo().equals("Tablet")) {
+                            TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(3);
+                            tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
 
-                        if (listaMarcasTablet.isEmpty()) {
-                            tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
-                            listaMarcasTablet.add(dispositivo.getMarca());
-                        } else {
-                            if (!listaMarcasTablet.contains(dispositivo.getMarca())) {
+                            if (listaMarcasTablet.isEmpty()) {
                                 tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                                 listaMarcasTablet.add(dispositivo.getMarca());
-                            }
+                            } else {
+                                if (!listaMarcasTablet.contains(dispositivo.getMarca())) {
+                                    tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
+                                    listaMarcasTablet.add(dispositivo.getMarca());
+                                }
 //                            else {
 //                                tipodispositivo.setCantidadMarcas(tipodispositivo.getListaMarcas().size());
 //                            }
-                        }
-                        tipodispositivo.setListaMarcas(listaMarcasTablet);
-                    } else {
-                        TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(4);
-                        tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
-
-                        if (listaMarcasOtro.isEmpty()) {
-                            tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
-                            listaMarcasOtro.add(dispositivo.getMarca());
+                            }
+                            tipodispositivo.setListaMarcas(listaMarcasTablet);
                         } else {
-                            if (!listaMarcasOtro.contains(dispositivo.getMarca())) {
+                            TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(4);
+                            tipodispositivo.setCantidad(tipodispositivo.getCantidad() + dispositivo.getStock());
+
+                            if (listaMarcasOtro.isEmpty()) {
                                 tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
                                 listaMarcasOtro.add(dispositivo.getMarca());
-                            }
+                            } else {
+                                if (!listaMarcasOtro.contains(dispositivo.getMarca())) {
+                                    tipodispositivo.setCantidadMarcas(tipodispositivo.getCantidadMarcas() + 1);
+                                    listaMarcasOtro.add(dispositivo.getMarca());
+                                }
 //                            else {
 //                                tipodispositivo.setCantidadMarcas(tipodispositivo.getListaMarcas().size());
 //                            }
+                            }
+                            tipodispositivo.setListaMarcas(listaMarcasOtro);
                         }
-                        tipodispositivo.setListaMarcas(listaMarcasOtro);
                     }
                 }
 

@@ -18,6 +18,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.DispositivoDto;
 import com.example.equipospucp.Fragments.DispositivosFragment;
 import com.example.equipospucp.Fragments.DispositivosPorTipoFragment;
@@ -29,6 +30,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 public class EditarDispositivo extends AppCompatActivity {
 
@@ -55,17 +58,13 @@ public class EditarDispositivo extends AppCompatActivity {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
+    DispositivoDetalleDto dispositivoDetalleDto;
+    String accion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_dispositivo);
-
-        String accion = getIntent().getStringExtra("accion");
-        if (accion.equals("nuevo")) {
-            getSupportActionBar().setTitle("Nuevo dispositivo");
-        } else {
-            getSupportActionBar().setTitle("Editar dispositivo");
-        }
 
         firebaseAuth = firebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -242,11 +241,11 @@ public class EditarDispositivo extends AppCompatActivity {
             }
         });
 
+        TextView stock = findViewById(R.id.textView_stock);
         ImageButton add = findViewById(R.id.addButton);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView stock = findViewById(R.id.textView_stock);
                 int stockInt = Integer.parseInt(stock.getText().toString());
                 stock.setText(String.valueOf(stockInt + 1));
             }
@@ -256,13 +255,44 @@ public class EditarDispositivo extends AppCompatActivity {
         minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView stock = findViewById(R.id.textView_stock);
                 int stockInt = Integer.parseInt(stock.getText().toString());
                 if (stockInt != 0) {
                     stock.setText(String.valueOf(stockInt - 1));
                 }
             }
         });
+
+        TextView titulo = findViewById(R.id.textView6);
+        accion = getIntent().getStringExtra("accion");
+        dispositivoDetalleDto = (DispositivoDetalleDto) getIntent().getSerializableExtra("dispositivo");
+        String[] some_array = getResources().getStringArray(R.array.tipos);
+        if (accion.equals("nuevo")) {
+            titulo.setText("Nuevo dispositivo");
+            getSupportActionBar().setTitle("Nuevo dispositivo");
+        } else {
+            titulo.setText("Editar dispositivo");
+            stock.setText(String.valueOf(dispositivoDetalleDto.getDispositivoDto().getStock()));
+            marca.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getMarca());
+            caracteristicas.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getCaracteristicas());
+            incluye.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getIncluye());
+
+            if (dispositivoDetalleDto.getDispositivoDto().getTipo().equals("Laptop")) {
+                spinner.setText(some_array[0],false);
+            } else if (dispositivoDetalleDto.getDispositivoDto().getTipo().equals("Monitor")) {
+                spinner.setText(some_array[1],false);
+            } else if (dispositivoDetalleDto.getDispositivoDto().getTipo().equals("Celular")) {
+                spinner.setText(some_array[2],false);
+            } else if (dispositivoDetalleDto.getDispositivoDto().getTipo().equals("Tablet")) {
+                spinner.setText(some_array[3],false);
+            } else {
+                spinner.setText(some_array[4],false);
+                tiposelected = "Otro";
+                tipo.setVisibility(View.VISIBLE);
+                tipo.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getTipo());
+            }
+
+            getSupportActionBar().setTitle("Editar dispositivo");
+        }
     }
 
     //MODIFICAR
@@ -359,23 +389,44 @@ public class EditarDispositivo extends AppCompatActivity {
             dispositivoDto.setStock(Integer.parseInt(stock.getText().toString()));
             dispositivoDto.setVisible(true);
 
-            databaseReference.push().setValue(dispositivoDto)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            Log.d("registro", "DISPOSITIVO GUARDADO");
-                            Intent intent = new Intent(EditarDispositivo.this, Drawer.class);
-                            intent.putExtra("exito", "El dispositivo se ha guardado exitosamente");
-                            startActivity(intent);
+            if (accion.equals("nuevo")) {
+                databaseReference.push().setValue(dispositivoDto)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("registro", "DISPOSITIVO GUARDADO");
+                                Intent intent = new Intent(EditarDispositivo.this, Drawer.class);
+                                intent.putExtra("exito", "El dispositivo se ha guardado exitosamente");
+                                startActivity(intent);
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("registro", "DISPOSITIVO NO GUARDADO - " + e.getMessage());
-                        }
-                    });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("registro", "DISPOSITIVO NO GUARDADO - " + e.getMessage());
+                            }
+                        });
+            } else {
+                databaseReference.child(dispositivoDetalleDto.getId()).setValue(dispositivoDto)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("registro", "DISPOSITIVO GUARDADO");
+                                Intent intent = new Intent(EditarDispositivo.this, Drawer.class);
+                                intent.putExtra("exito", "El dispositivo se ha editado exitosamente");
+                                startActivity(intent);
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("registro", "DISPOSITIVO NO GUARDADO - " + e.getMessage());
+                            }
+                        });
+            }
+
         }
     }
 

@@ -105,11 +105,11 @@ public class DispositivosPorTipoFragment extends Fragment {
                     dispositivoDetalle.setId(ds.getKey());
 
                     if (pestaniaOtros) {
-                        if (!dispositivo.getTipo().equals("Laptop") && !dispositivo.getTipo().equals("Monitor") && !dispositivo.getTipo().equals("Celular") && !dispositivo.getTipo().equals("Tablet")) {
+                        if (!dispositivo.getTipo().equals("Laptop") && !dispositivo.getTipo().equals("Monitor") && !dispositivo.getTipo().equals("Celular") && !dispositivo.getTipo().equals("Tablet") && dispositivo.getVisible()) {
                             listaDispositivos.add(dispositivoDetalle);
                         }
                     } else {
-                        if (dispositivo.getTipo().equals(tipo)) {
+                        if (dispositivo.getTipo().equals(tipo) && dispositivo.getVisible()) {
                             listaDispositivos.add(dispositivoDetalle);
                         }
                     }

@@ -1,6 +1,8 @@
 package com.example.equipospucp.DTOs;
 
-public class DispositivoDetalleDto {
+import java.io.Serializable;
+
+public class DispositivoDetalleDto implements Serializable {
 
     private String id;
     private DispositivoDto dispositivoDto;
