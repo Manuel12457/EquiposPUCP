@@ -13,10 +13,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.equipospucp.Adapters.DispositivoDetalleAdapter;
-import com.example.equipospucp.Adapters.ListaTipoDispositivoAdapter;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
-import com.example.equipospucp.DTOs.DispositivoDto;
-import com.example.equipospucp.Fragments.DispositivosFragment;
+import com.example.equipospucp.DTOs.Dispositivo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -83,17 +81,17 @@ public class DetallesDispositivo extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
 
                                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("dispositivos");
-                                DispositivoDto dispositivoDto = new DispositivoDto();
+                                Dispositivo dispositivo = new Dispositivo();
 
-                                dispositivoDto.setTipo(listaDispositivos.get(0).getDispositivoDto().getTipo());
-                                dispositivoDto.setFoto("");
-                                dispositivoDto.setMarca(listaDispositivos.get(0).getDispositivoDto().getMarca());
-                                dispositivoDto.setCaracteristicas(listaDispositivos.get(0).getDispositivoDto().getCaracteristicas());
-                                dispositivoDto.setIncluye(listaDispositivos.get(0).getDispositivoDto().getIncluye());
-                                dispositivoDto.setStock(listaDispositivos.get(0).getDispositivoDto().getStock());
-                                dispositivoDto.setVisible(false);
+                                dispositivo.setTipo(listaDispositivos.get(0).getDispositivoDto().getTipo());
+                                dispositivo.setFoto("");
+                                dispositivo.setMarca(listaDispositivos.get(0).getDispositivoDto().getMarca());
+                                dispositivo.setCaracteristicas(listaDispositivos.get(0).getDispositivoDto().getCaracteristicas());
+                                dispositivo.setIncluye(listaDispositivos.get(0).getDispositivoDto().getIncluye());
+                                dispositivo.setStock(listaDispositivos.get(0).getDispositivoDto().getStock());
+                                dispositivo.setVisible(false);
 
-                                databaseReference.child(listaDispositivos.get(0).getId()).setValue(dispositivoDto)
+                                databaseReference.child(listaDispositivos.get(0).getId()).setValue(dispositivo)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
@@ -133,7 +131,7 @@ public class DetallesDispositivo extends AppCompatActivity {
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     if (ds.getKey().equals(id)) {
-                        DispositivoDto dispositivo = ds.getValue(DispositivoDto.class);
+                        Dispositivo dispositivo = ds.getValue(Dispositivo.class);
                         DispositivoDetalleDto dispositivoDetalle = new DispositivoDetalleDto();
                         dispositivoDetalle.setDispositivoDto(dispositivo);
                         dispositivoDetalle.setId(ds.getKey());

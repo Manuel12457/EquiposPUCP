@@ -6,19 +6,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.equipospucp.Adapters.ListaTipoDispositivoAdapter;
-import com.example.equipospucp.DTOs.DispositivoDto;
+import com.example.equipospucp.DTOs.Dispositivo;
 import com.example.equipospucp.DTOs.TipoDispositivoDto;
 import com.example.equipospucp.EditarDispositivo;
 import com.example.equipospucp.R;
@@ -115,7 +111,7 @@ public class DispositivosFragment extends Fragment {
                 listaTipoDispositivos.add(new TipoDispositivoDto("Otros",0,0, listaMarcasOtro));
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    DispositivoDto dispositivo = ds.getValue(DispositivoDto.class);
+                    Dispositivo dispositivo = ds.getValue(Dispositivo.class);
                     if (dispositivo.getVisible()) {
                         if (dispositivo.getTipo().equals("Laptop")) {
                             TipoDispositivoDto tipodispositivo = listaTipoDispositivos.get(0);

@@ -2,7 +2,6 @@ package com.example.equipospucp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
-import com.example.equipospucp.DTOs.DispositivoDto;
-import com.example.equipospucp.DTOs.TipoDispositivoDto;
 import com.example.equipospucp.DetallesDispositivo;
-import com.example.equipospucp.Drawer;
-import com.example.equipospucp.EditarDispositivo;
-import com.example.equipospucp.Fragments.DispositivosPorTipoFragment;
 import com.example.equipospucp.R;
 
 import java.util.ArrayList;

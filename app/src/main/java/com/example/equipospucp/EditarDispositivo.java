@@ -19,10 +19,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
-import com.example.equipospucp.DTOs.DispositivoDto;
-import com.example.equipospucp.Fragments.DispositivosFragment;
-import com.example.equipospucp.Fragments.DispositivosPorTipoFragment;
-import com.example.equipospucp.Fragments.ProfileFragment;
+import com.example.equipospucp.DTOs.Dispositivo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -30,8 +27,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.w3c.dom.Text;
 
 public class EditarDispositivo extends AppCompatActivity {
 
@@ -380,22 +375,22 @@ public class EditarDispositivo extends AppCompatActivity {
 
             //Guardar usuario en db
             DatabaseReference databaseReference = firebaseDatabase.getReference().child("dispositivos");
-            DispositivoDto dispositivoDto = new DispositivoDto();
+            Dispositivo dispositivo = new Dispositivo();
 
             if (!tiposelected.equals("Otro")) {
-                dispositivoDto.setTipo(tiposelected);
+                dispositivo.setTipo(tiposelected);
             } else {
-                dispositivoDto.setTipo(tipo.getEditText().getText().toString());
+                dispositivo.setTipo(tipo.getEditText().getText().toString());
             }
-            dispositivoDto.setFoto("");
-            dispositivoDto.setMarca(marca.getEditText().getText().toString());
-            dispositivoDto.setCaracteristicas(caracteristicas.getEditText().getText().toString());
-            dispositivoDto.setIncluye(incluye.getEditText().getText().toString());
-            dispositivoDto.setStock(Integer.parseInt(stock.getText().toString()));
-            dispositivoDto.setVisible(true);
+            dispositivo.setFoto("");
+            dispositivo.setMarca(marca.getEditText().getText().toString());
+            dispositivo.setCaracteristicas(caracteristicas.getEditText().getText().toString());
+            dispositivo.setIncluye(incluye.getEditText().getText().toString());
+            dispositivo.setStock(Integer.parseInt(stock.getText().toString()));
+            dispositivo.setVisible(true);
 
             if (accion.equals("nuevo")) {
-                databaseReference.push().setValue(dispositivoDto)
+                databaseReference.push().setValue(dispositivo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
@@ -413,7 +408,7 @@ public class EditarDispositivo extends AppCompatActivity {
                             }
                         });
             } else {
-                databaseReference.child(dispositivoDetalleDto.getId()).setValue(dispositivoDto)
+                databaseReference.child(dispositivoDetalleDto.getId()).setValue(dispositivo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {

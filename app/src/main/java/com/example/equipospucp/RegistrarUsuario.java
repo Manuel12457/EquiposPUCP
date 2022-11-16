@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 
-import com.example.equipospucp.DTOs.UsuarioDto;
+import com.example.equipospucp.DTOs.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -326,12 +326,12 @@ public class RegistrarUsuario extends AppCompatActivity {
 
                         //Guardar usuario en db
                         DatabaseReference databaseReference = firebaseDatabase.getReference().child("usuarios").child(firebaseAuth.getCurrentUser().getUid());
-                        UsuarioDto usuarioDto = new UsuarioDto();
-                        usuarioDto.setCodigo(codigo.getEditText().getText().toString());
-                        usuarioDto.setRol(rol);
-                        usuarioDto.setCorreo(correo.getEditText().getText().toString());
-                        usuarioDto.setFoto("");
-                        databaseReference.setValue(usuarioDto)
+                        Usuario usuario = new Usuario();
+                        usuario.setCodigo(codigo.getEditText().getText().toString());
+                        usuario.setRol(rol);
+                        usuario.setCorreo(correo.getEditText().getText().toString());
+                        usuario.setFoto("");
+                        databaseReference.setValue(usuario)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {

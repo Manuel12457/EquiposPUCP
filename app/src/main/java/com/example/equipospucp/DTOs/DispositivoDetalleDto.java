@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class DispositivoDetalleDto implements Serializable {
 
     private String id;
-    private DispositivoDto dispositivoDto;
+    private Dispositivo dispositivo;
 
     public String getId() {
         return id;
@@ -15,11 +15,11 @@ public class DispositivoDetalleDto implements Serializable {
         this.id = id;
     }
 
-    public DispositivoDto getDispositivoDto() {
-        return dispositivoDto;
+    public Dispositivo getDispositivoDto() {
+        return dispositivo;
     }
 
-    public void setDispositivoDto(DispositivoDto dispositivoDto) {
-        this.dispositivoDto = dispositivoDto;
+    public void setDispositivoDto(Dispositivo dispositivo) {
+        this.dispositivo = dispositivo;
     }
 }

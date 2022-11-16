@@ -3,6 +3,7 @@
     <string name="hintSpinner">Rol</string>
     <string name="hintSpinnerMarca">Marca</string>
     <string name="hintSpinnerTipo">Tipo</string>
+    <string name="hintSpinnerReservas">Fecha de reserva</string>
     <string-array name="roles">
         <item>Alumno</item>
         <item>Docente</item>
@@ -14,6 +15,13 @@
         <item>Celular</item>
         <item>Tablet</item>
         <item>Otro</item>
+    </string-array>
+    <string-array name="reservas">
+        <item>Todas las reservas</item>
+        <item>Hoy</item>
+        <item>Ayer</item>
+        <item>Hace 1 semana</item>
+        <item>Hace 2 semanas</item>
     </string-array>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

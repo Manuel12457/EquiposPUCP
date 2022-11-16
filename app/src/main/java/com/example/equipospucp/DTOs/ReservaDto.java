@@ -2,10 +2,10 @@ package com.example.equipospucp.DTOs;
 
 import java.io.Serializable;
 
-public class UsuarioDto implements Serializable {
+public class ReservaDto implements Serializable {
 
     private String id;
-    private Usuario usuario;
+    private Reserva reserva;
 
     public String getId() {
         return id;
@@ -15,11 +15,11 @@ public class UsuarioDto implements Serializable {
         this.id = id;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Reserva getReserva() {
+        return reserva;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setReserva(Reserva reserva) {
+        this.reserva = reserva;
     }
 }

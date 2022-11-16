@@ -1,34 +1,109 @@
 package com.example.equipospucp;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.example.equipospucp.DTOs.DispositivoDto;
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Log.d("Calendar", sf.format(currentTime));
+
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sf.parse(sf.format(currentTime)));
+            c.add(Calendar.DATE, 1);
+            Log.d("Calendar", "Sumo un dia: " + sf.format(c.getTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (currentTime.before(c.getTime())) {
+            Log.d("Calendar", "ENTRO EN IF");
+        } else {
+            Log.d("Calendar", "NO ENTRO EN IF");
+        }
+
+
+//        try {
+//            Date dateTime = sf.parse("19-08-2022; 01:34:23");
+//            System.out.println(dateTime);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
+        //Guardar usuario en db
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("reservas");
+//        Dispositivo dispositivo = new Dispositivo();
+//        UsuarioDto usuarioDto = new UsuarioDto();
+//
+//        dispositivo.setFoto("");
+//        dispositivo.setCaracteristicas("Caracteristicas");
+//        dispositivo.setIncluye("Incluye");
+//        dispositivo.setMarca("Marca");
+//        dispositivo.setStock(100);
+//        dispositivo.setVisible(true);
+//        dispositivo.setTipo("Tipo");
+//
+//        usuarioDto.setCorreo("correo");
+//        usuarioDto.setFoto("");
+//        usuarioDto.setCodigo("Codigo");
+//        usuarioDto.setRol("Rol");
+//
+//        Reserva reserva = new Reserva();
+//        reserva.setUsuario(usuarioDto);
+//        reserva.setDispositivo(dispositivo);
+//        reserva.setCurso("Curso");
+//        reserva.setTiempoReserva(30);
+//        reserva.setDni("");
+//        reserva.setDetallesAdicionales("Detalles adicionales");
+//        reserva.setEstado("Estado");
+//        reserva.setFechayhora("Fecha y hora");
+//        reserva.setLatitud("Latitud");
+//        reserva.setLongitud("Longitud");
+//        reserva.setMotivo("Motivo");
+//        reserva.setProgramasInstalados("Programas instalados");
+//
+//            databaseReference.push().setValue(reserva)
+//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void unused) {
+//                            Log.d("registro", "DISPOSITIVO GUARDADO");
+//
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.d("registro", "DISPOSITIVO NO GUARDADO - " + e.getMessage());
+//                        }
+//                    });
+
+
     }
 
     public boolean verificarEstadoInternet() {

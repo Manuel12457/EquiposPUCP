@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.equipospucp.Adapters.ListaDispositivoAdapter;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
-import com.example.equipospucp.DTOs.DispositivoDto;
+import com.example.equipospucp.DTOs.Dispositivo;
 import com.example.equipospucp.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
@@ -99,7 +99,7 @@ public class DispositivosPorTipoFragment extends Fragment {
                 listaDispositivos.clear();
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    DispositivoDto dispositivo = ds.getValue(DispositivoDto.class);
+                    Dispositivo dispositivo = ds.getValue(Dispositivo.class);
                     DispositivoDetalleDto dispositivoDetalle = new DispositivoDetalleDto();
                     dispositivoDetalle.setDispositivoDto(dispositivo);
                     dispositivoDetalle.setId(ds.getKey());
