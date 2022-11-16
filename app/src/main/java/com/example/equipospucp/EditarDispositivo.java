@@ -262,6 +262,7 @@ public class EditarDispositivo extends AppCompatActivity {
             }
         });
 
+        TextInputLayout spinnera = findViewById(R.id.spinner_tipo);
         TextView titulo = findViewById(R.id.textView6);
         accion = getIntent().getStringExtra("accion");
         dispositivoDetalleDto = (DispositivoDetalleDto) getIntent().getSerializableExtra("dispositivo");
@@ -276,6 +277,9 @@ public class EditarDispositivo extends AppCompatActivity {
             caracteristicas.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getCaracteristicas());
             incluye.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getIncluye());
 
+            spinnera.setEnabled(false);
+            spinner.setEnabled(false);
+
             if (dispositivoDetalleDto.getDispositivoDto().getTipo().equals("Laptop")) {
                 spinner.setText(some_array[0],false);
             } else if (dispositivoDetalleDto.getDispositivoDto().getTipo().equals("Monitor")) {
@@ -289,6 +293,7 @@ public class EditarDispositivo extends AppCompatActivity {
                 tiposelected = "Otro";
                 tipo.setVisibility(View.VISIBLE);
                 tipo.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getTipo());
+                tipo.setEnabled(false);
             }
 
             getSupportActionBar().setTitle("Editar dispositivo");
@@ -435,7 +440,11 @@ public class EditarDispositivo extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(EditarDispositivo.this);
-                builder.setMessage("¿Seguro que desea regresar a la pantalla de inicio? Perderá los datos ingresados");
+                if (accion.equals("nuevo")) {
+                    builder.setMessage("¿Volver a la pantalla anterior? Perderá los datos ingresados");
+                } else {
+                    builder.setMessage("¿Volver a la pantalla anterior? Perderá los datos editados");
+                }
                 builder.setPositiveButton("Aceptar",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -458,7 +467,11 @@ public class EditarDispositivo extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(EditarDispositivo.this);
-        builder.setMessage("¿Seguro que desea regresar a la pantalla de inicio? Perderá los datos ingresados");
+        if (accion.equals("nuevo")) {
+            builder.setMessage("¿Volver a la pantalla anterior? Perderá los datos ingresados");
+        } else {
+            builder.setMessage("¿Volver a la pantalla anterior? Perderá los datos editados");
+        }
         builder.setPositiveButton("Aceptar",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

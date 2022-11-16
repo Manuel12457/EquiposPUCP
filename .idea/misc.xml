@@ -28,7 +28,11 @@
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/header1.xml" value="0.22395833333333334" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/item_dispositivo.xml" value="0.2203125" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/item_dispositivodetalle.xml" value="0.221875" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/item_marcas.xml" value="0.221875" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/item_reservas.xml" value="0.22291666666666668" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/item_reservasusuario.xml" value="0.221875" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/item_tipo_dispositivo.xml" value="0.22135416666666666" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/item_usuario.xml" value="0.22291666666666668" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/nav_header_listado_dispositivos.xml" value="0.225" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/profile_fragment.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCP/app/src/main/res/layout/reservas_fragment.xml" value="0.21822916666666667" />
