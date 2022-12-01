@@ -150,6 +150,7 @@ public class RegistrarUsuario extends AppCompatActivity {
         });
 
         TextInputLayout password = findViewById(R.id.inputPassword_registro);
+        password.setErrorIconDrawable(null);
         password.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -193,6 +194,7 @@ public class RegistrarUsuario extends AppCompatActivity {
         });
 
         TextInputLayout verifyPassword = findViewById(R.id.inputVerifyPassword_registro);
+        verifyPassword.setErrorIconDrawable(null);
         verifyPassword.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
