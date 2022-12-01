@@ -10,8 +10,12 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.example.equipospucp.DTOs.UsuarioDto;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,12 +26,16 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    FirebaseAuth auth;
+    DatabaseReference ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        auth = FirebaseAuth.getInstance();
 
         Date currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
@@ -177,5 +185,16 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         builder.show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Si ya existe una cuenta verificada guardada, se saltea esta vista
+        if (auth.getCurrentUser() != null && auth.getCurrentUser().isEmailVerified()){
+
+            startActivity(new Intent(getApplicationContext(),Drawer.class));
+        }
     }
 }

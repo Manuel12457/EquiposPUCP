@@ -119,6 +119,7 @@ public class InicioSesion extends AppCompatActivity {
 
                                     Intent intent = new Intent(InicioSesion.this, Drawer.class);
                                     startActivity(intent);
+                                    finish();
                                 } else {
                                     Snackbar.make(findViewById(R.id.activity_iniciar_sesion), "Su cuenta no ha sido verificada. Verifíquela para poder ingresar", Snackbar.LENGTH_LONG).show();
                                 }
