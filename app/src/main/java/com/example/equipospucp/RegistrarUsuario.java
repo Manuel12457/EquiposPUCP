@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 
 import com.example.equipospucp.DTOs.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,16 +21,28 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class RegistrarUsuario extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReferenceCorreos;
+    ValueEventListener valueEventListener;
+    ArrayList<String> listaCorreosRegistrados = new ArrayList<>();
+
+    Button btn;
+    CircularProgressIndicator circularProgressIndicator;
 
     boolean codigoValido = true;
     boolean correoValido = true;
@@ -49,8 +62,13 @@ public class RegistrarUsuario extends AppCompatActivity {
         setContentView(R.layout.activity_registrar_usuario);
         getSupportActionBar().setTitle("Registro de usuario");
 
+        btn = findViewById(R.id.btn_registrarseForm);
+        circularProgressIndicator = findViewById(R.id.idProgress);
+
         firebaseAuth = firebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReferenceCorreos = firebaseDatabase.getReference("usuarios");
+        valueEventListener = databaseReferenceCorreos.addValueEventListener(new listener());
 
         TextInputLayout codigo = findViewById(R.id.inputCodigo_registro);
         codigo.getEditText().addTextChangedListener(new TextWatcher() {
@@ -168,10 +186,10 @@ public class RegistrarUsuario extends AppCompatActivity {
                 if (password.isErrorEnabled()) {
                     if ((password.getEditText().getText().toString() != null && !password.getEditText().getText().toString().equals(""))) {
                         if (!longitudContrasenia) {
-                            codigo.setError("La longitud del código debe ser de mínimo 6 caracteres");
+                            password.setError("La longitud del código debe ser de mínimo 6 caracteres");
                             passwordValido = false;
                         } else {
-                            codigo.setErrorEnabled(false);
+                            password.setErrorEnabled(false);
                             passwordValido = true;
                         }
                     } else {
@@ -242,6 +260,10 @@ public class RegistrarUsuario extends AppCompatActivity {
     }
 
     public void validarRegistro(View view) {
+
+        btn.setEnabled(false);
+        circularProgressIndicator.setVisibility(View.VISIBLE);
+
         TextInputLayout codigo = findViewById(R.id.inputCodigo_registro);
         TextInputLayout correo = findViewById(R.id.inputCorreo_registro);
         TextInputLayout password = findViewById(R.id.inputPassword_registro);
@@ -280,8 +302,14 @@ public class RegistrarUsuario extends AppCompatActivity {
                 correoValido = false;
             } else {
                 //Validar si usuario existe en el sistema
-                vecesCorreo++;
-                correo.setErrorEnabled(false);
+                if (!listaCorreosRegistrados.contains(correo.getEditText().getText().toString())) {
+                    vecesCorreo++;
+                    correo.setErrorEnabled(false);
+                } else {
+                    vecesCorreo++;
+                    correo.setError("El correo ingresado ya ha sido registrado");
+                    correoValido = false;
+                }
             }
         } else {
             //Texto NO ha sido ingresado en el edittext
@@ -356,6 +384,8 @@ public class RegistrarUsuario extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                btn.setEnabled(true);
+                                circularProgressIndicator.setVisibility(View.GONE);
                                 Log.d("task", "ERROR EN ENVIO DE CORREO DE VERIFICACION - " + e.getMessage());
                             }
                         });
@@ -411,5 +441,32 @@ public class RegistrarUsuario extends AppCompatActivity {
                     }
                 });
         builder.show();
+    }
+
+    class listener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                listaCorreosRegistrados.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Usuario usuario = ds.getValue(Usuario.class);
+                    listaCorreosRegistrados.add(usuario.getCorreo());
+                }
+            } else {
+                listaCorreosRegistrados.clear();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.e("msg", "Error onCancelled", error.toException());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        databaseReferenceCorreos.removeEventListener(valueEventListener);
+        super.onDestroy();
     }
 }
