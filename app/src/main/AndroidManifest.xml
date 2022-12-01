@@ -17,9 +17,21 @@
         android:theme="@style/TemaEquiposPUCP"
         tools:targetApi="31">
         <activity
+            android:name=".DetalleUsuario"
+            android:exported="false" />
+        <activity
+            android:name=".NuevoUsuarioTI"
+            android:exported="false" />
+        <activity
+            android:name=".NuevaReserva"
+            android:exported="false" />
+        <activity
+            android:name=".DetallesReserva"
+            android:exported="false" />
+        <activity
             android:name=".DetallesDispositivo"
             android:exported="false"
-            android:parentActivityName=".Drawer"/>
+            android:parentActivityName=".Drawer" />
         <activity
             android:name=".EditarDispositivo"
             android:exported="false"
