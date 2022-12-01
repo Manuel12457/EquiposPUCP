@@ -14,7 +14,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView12"
@@ -46,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:hint="Motivo"
+                android:visibility="visible"
                 app:counterEnabled="true"
                 app:counterMaxLength="500"
                 app:layout_constraintEnd_toEndOf="@+id/textView13"
@@ -126,34 +127,49 @@
                 app:layout_constraintStart_toStartOf="@+id/inputCurso_Reserva"
                 app:layout_constraintTop_toBottomOf="@+id/inputCurso_Reserva" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputProgramas_Reserva"
+            <TextView
+                android:id="@+id/textView15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Programas a instalar"
-                app:counterEnabled="true"
-                app:counterMaxLength="500"
+                android:text="DNI"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="@+id/linearLayout"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="302dp"
-                    android:layout_height="200dp"
-                    android:gravity="start|top"
-                    android:inputType="textLongMessage|textMultiLine|text" />
+            <ImageView
+                android:id="@+id/imageViewDNI"
+                android:layout_width="250dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/textView15"
+                app:layout_constraintHorizontal_bias="0.506"
+                app:layout_constraintStart_toStartOf="@+id/textView15"
+                app:layout_constraintTop_toBottomOf="@+id/textView15"
+                app:srcCompat="@drawable/ic_image" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            <ImageButton
+                android:id="@+id/imageButton_elegirDNI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="96dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageViewDNI"
+                app:layout_constraintEnd_toEndOf="@+id/imageViewDNI"
+                app:srcCompat="@drawable/ic_edit" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputDetallesAdicionales_Reserva"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Programas a instalar"
+                android:layout_marginBottom="16dp"
+                android:hint="Detalles adicionales"
+                android:visibility="visible"
                 app:counterEnabled="true"
                 app:counterMaxLength="500"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/inputProgramas_Reserva"
                 app:layout_constraintStart_toStartOf="@+id/inputProgramas_Reserva"
                 app:layout_constraintTop_toBottomOf="@+id/inputProgramas_Reserva">
@@ -166,16 +182,26 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/textView15"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputProgramas_Reserva"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="DNI"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="@+id/inputDetallesAdicionales_Reserva"
-                app:layout_constraintStart_toStartOf="@+id/inputDetallesAdicionales_Reserva"
-                app:layout_constraintTop_toBottomOf="@+id/inputDetallesAdicionales_Reserva" />
+                android:hint="Programas a instalar"
+                android:visibility="visible"
+                app:counterEnabled="true"
+                app:counterMaxLength="500"
+                app:layout_constraintEnd_toEndOf="@+id/imageViewDNI"
+                app:layout_constraintStart_toStartOf="@+id/imageViewDNI"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewDNI">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="302dp"
+                    android:layout_height="200dp"
+                    android:gravity="start|top"
+                    android:inputType="textLongMessage|textMultiLine|text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

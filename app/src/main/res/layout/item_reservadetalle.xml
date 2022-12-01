@@ -136,7 +136,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
-        app:srcCompat="@drawable/defaultpp" />
+        app:srcCompat="@drawable/ic_image" />
 
     <TextView
         android:id="@+id/textView18"
@@ -155,5 +155,21 @@
         android:layout_weight="1"
         android:text="Sin detalles adicionales"
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:text="Recojo del dispositivo"
+        android:textSize="16sp" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        android:layout_weight="1" />
 
 </LinearLayout>
