@@ -29,20 +29,39 @@
         android:textSize="20sp" />
 
     <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Incluye:"
+        android:textSize="16sp" />
+
+    <TextView
         android:id="@+id/textView_incluye"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="16dp"
         android:layout_weight="1"
-        android:text="Incluye:\n\tCargador Estuche protector\n\tMouse inalámbrico "
+        android:text="Cargador Estuche protector\nMouse inalámbrico "
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Características"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/textView_caracteristicas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="16dp"
         android:layout_weight="1"
-        android:text="Características:\n\tMicrosoft Word instalado"
+        android:text="Microsoft Word instalado"
         android:textSize="16sp" />
+
 </LinearLayout>

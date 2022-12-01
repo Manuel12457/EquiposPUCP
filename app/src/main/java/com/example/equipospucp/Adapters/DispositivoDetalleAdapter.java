@@ -61,19 +61,19 @@ public class DispositivoDetalleAdapter extends RecyclerView.Adapter<DispositivoD
 
         holder.textViewdetalles.setText("Tipo: "+ dispositivo.getDispositivoDto().getTipo() +"\nMarca: " + dispositivo.getDispositivoDto().getMarca() + "\nStock: " + dispositivo.getDispositivoDto().getStock() + "\nEquipos reservados: ");
 
-        String caracteristicasenview = "Características:";
+        String caracteristicasenview = "";
         String caracteristicas = dispositivo.getDispositivoDto().getCaracteristicas();
         List<String> listadoCaracteristicas = Arrays.asList(caracteristicas.split("\\. "));
         for (String s : listadoCaracteristicas) {
-            caracteristicasenview = caracteristicasenview + "\n\t" + s;
+            caracteristicasenview = caracteristicasenview + s + "\n";
         }
         holder.textViewcaracteristicas.setText(caracteristicasenview);
 
-        String incluyeenview = "Incluye:";
+        String incluyeenview = "";
         String inlcuye = dispositivo.getDispositivoDto().getIncluye();
         List<String> listadoIncluye = Arrays.asList(inlcuye.split("\\. "));
         for (String s : listadoIncluye) {
-            incluyeenview = incluyeenview + "\n\t" + s;
+            incluyeenview = incluyeenview + s + "\n";
         }
         holder.textViewincluye.setText(incluyeenview);
 

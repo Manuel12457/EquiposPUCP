@@ -251,22 +251,19 @@ public class EditarDispositivo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int stockInt = Integer.parseInt(stock.getText().toString());
-                if (stockInt != 0) {
+                if (stockInt != 1) {
                     stock.setText(String.valueOf(stockInt - 1));
                 }
             }
         });
 
         TextInputLayout spinnera = findViewById(R.id.spinner_tipo);
-        TextView titulo = findViewById(R.id.textView6);
         accion = getIntent().getStringExtra("accion");
         dispositivoDetalleDto = (DispositivoDetalleDto) getIntent().getSerializableExtra("dispositivo");
         String[] some_array = getResources().getStringArray(R.array.tipos);
         if (accion.equals("nuevo")) {
-            titulo.setText("Nuevo dispositivo");
             getSupportActionBar().setTitle("Nuevo dispositivo");
         } else {
-            titulo.setText("Editar dispositivo");
             stock.setText(String.valueOf(dispositivoDetalleDto.getDispositivoDto().getStock()));
             marca.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getMarca());
             caracteristicas.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getCaracteristicas());
@@ -276,12 +273,16 @@ public class EditarDispositivo extends AppCompatActivity {
             spinner.setEnabled(false);
 
             if (dispositivoDetalleDto.getDispositivoDto().getTipo().equals("Laptop")) {
+                tiposelected = "Laptop";
                 spinner.setText(some_array[0],false);
             } else if (dispositivoDetalleDto.getDispositivoDto().getTipo().equals("Monitor")) {
+                tiposelected = "Monitor";
                 spinner.setText(some_array[1],false);
             } else if (dispositivoDetalleDto.getDispositivoDto().getTipo().equals("Celular")) {
+                tiposelected = "Celular";
                 spinner.setText(some_array[2],false);
             } else if (dispositivoDetalleDto.getDispositivoDto().getTipo().equals("Tablet")) {
+                tiposelected = "Tablet";
                 spinner.setText(some_array[3],false);
             } else {
                 spinner.setText(some_array[4],false);
@@ -304,7 +305,6 @@ public class EditarDispositivo extends AppCompatActivity {
         TextInputLayout marca = findViewById(R.id.inputMarca_nuevodispositivo);
         TextInputLayout caracteristicas = findViewById(R.id.inputCaracteristicas_nuevodispositivo);
         TextInputLayout incluye = findViewById(R.id.inputIncluye_nuevodispositivo);
-        TextView errorStock = findViewById(R.id.stockInvalido);
 
         TextView stock = findViewById(R.id.textView_stock);
 
@@ -334,8 +334,14 @@ public class EditarDispositivo extends AppCompatActivity {
 
         if (caracteristicas.getEditText().getText().toString() != null && !caracteristicas.getEditText().getText().toString().equals("")) {
             //Texto ha sido ingresado en el edittext
-            vecescaracteristicas++;
-            marca.setErrorEnabled(false);
+            if (caracteristicas.getEditText().getText().toString().length() > 500) {
+                vecescaracteristicas++;
+                caracteristicas.setError("Las características no pueden exceder de los 500 caracteres");
+                caracteristicasValido = false;
+            } else {
+                vecescaracteristicas++;
+                marca.setErrorEnabled(false);
+            }
         } else {
             vecescaracteristicas++;
             caracteristicas.setError("Ingrese las características");
@@ -344,22 +350,18 @@ public class EditarDispositivo extends AppCompatActivity {
 
         if (incluye.getEditText().getText().toString() != null && !incluye.getEditText().getText().toString().equals("")) {
             //Texto ha sido ingresado en el edittext
-            vecesincluye++;
-            incluye.setErrorEnabled(false);
+            if (incluye.getEditText().getText().toString().length() > 500) {
+                vecesincluye++;
+                incluye.setError("Lo que incluye no pueden exceder de los 500 caracteres");
+                incluyeValido = false;
+            } else {
+                vecesincluye++;
+                incluye.setErrorEnabled(false);
+            }
         } else {
             vecesincluye++;
             incluye.setError("Ingrese lo que incluye el dispositivo");
             incluyeValido = false;
-        }
-
-        if (Integer.parseInt(stock.getText().toString()) == 0) {
-            stockValido = false;
-            Log.d("msg", "VALOR STOCK IGUAL 0");
-            errorStock.setVisibility(View.VISIBLE);
-        } else {
-            stockValido = true;
-            errorStock.setVisibility(View.GONE);
-            Log.d("msg", "VALOR STOCK DIFERENTE DE 0");
         }
 
         tipoValido = (tiposelected != null && !tiposelected.equals("")) ? true : false;
