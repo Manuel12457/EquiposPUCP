@@ -104,7 +104,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:inputType="number"
-                    android:text="1 dia(s)"
+                    android:text="1"
                     android:textSize="20sp" />
 
                 <ImageButton
@@ -121,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Tiempo de reserva"
+                android:text="Tiempo de reserva (dias)"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/inputCurso_Reserva"
                 app:layout_constraintStart_toStartOf="@+id/inputCurso_Reserva"
