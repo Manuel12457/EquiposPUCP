@@ -17,7 +17,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/tvAlumno_Reserva"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -29,16 +29,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/tvDispositivo_Reserva"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="Dispositivo a reservar:\nCelular Samsung"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="@+id/textView12"
-                app:layout_constraintStart_toStartOf="@+id/textView12"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+                app:layout_constraintEnd_toEndOf="@+id/tvAlumno_Reserva"
+                app:layout_constraintStart_toStartOf="@+id/tvAlumno_Reserva"
+                app:layout_constraintTop_toBottomOf="@+id/tvAlumno_Reserva" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputMotivo_Reserva"
@@ -95,7 +95,7 @@
                     app:srcCompat="@drawable/ic_minus" />
 
                 <TextView
-                    android:id="@+id/textView_diasReserva"
+                    android:id="@+id/tvDias_Reserva"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -155,6 +155,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="96dp"
+                android:onClick="obtenerImagen"
                 app:layout_constraintBottom_toBottomOf="@+id/imageViewDNI"
                 app:layout_constraintEnd_toEndOf="@+id/imageViewDNI"
                 app:srcCompat="@drawable/ic_edit" />

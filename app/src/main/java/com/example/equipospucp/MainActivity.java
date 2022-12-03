@@ -197,4 +197,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(),Drawer.class));
         }
     }
+
+    public void hacerPrueba(View view){
+        startActivity(new Intent(MainActivity.this,NuevaReserva.class));
+    }
 }
