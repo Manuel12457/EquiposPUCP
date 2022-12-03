@@ -1,0 +1,1 @@
+/home/percy/AndroidStudioProjects/EquiposPUCP/openCV/build/intermediates/cxx/RelWithDebInfo/635l6i6h/obj/x86

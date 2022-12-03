@@ -90,7 +90,7 @@ public class NuevaReserva extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            file.delete();
         }
 
     }
@@ -161,6 +161,8 @@ public class NuevaReserva extends AppCompatActivity {
                 areaBlur.release();
             }
             Utils.matToBitmap(mat,bitmap);
+
+            // Se pone en el imgView
             imgDNI.setImageBitmap(bitmap);
             imgDNI.setScaleType(ImageView.ScaleType.CENTER_CROP);
             conFoto = true;
