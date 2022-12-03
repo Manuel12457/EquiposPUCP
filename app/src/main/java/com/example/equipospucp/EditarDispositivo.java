@@ -1,12 +1,23 @@
 package com.example.equipospucp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,23 +26,39 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.equipospucp.Adapters.ImagenesEdicionDispositivoAdapter;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.Dispositivo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class EditarDispositivo extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class EditarDispositivo extends AppCompatActivity implements ImagenesEdicionDispositivoAdapter.CountOfImagesWhenRemoved, ImagenesEdicionDispositivoAdapter.ItemClickListener {
 
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
+
+    private Uri imageURL;
+    RecyclerView recyclerView;
+    ArrayList<Uri> listaImagenes = new ArrayList<>();
+    Button btnGaleria;
+    TextView noImagenes;
+    ImagenesEdicionDispositivoAdapter adapter;
+    private static final int Read_Permission = 101;
+    private static final int PICK_IMAGE = 1;
+    boolean masde5imagenes = false;
 
     boolean tipoNuevoValido = true;
 
@@ -40,6 +67,7 @@ public class EditarDispositivo extends AppCompatActivity {
     boolean stockValido = true;
     boolean caracteristicasValido = true;
     boolean incluyeValido = true;
+    boolean cantidadFotosValido = true;
 
     int vecestipo = 0;
     int vecesmarca = 0;
@@ -63,6 +91,35 @@ public class EditarDispositivo extends AppCompatActivity {
 
         firebaseAuth = firebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+
+        //SELECCIONAR IMAGENES
+        btnGaleria = findViewById(R.id.btn_elegirImagenes);
+        recyclerView = findViewById(R.id.recyclerViewImagenesEdicion);
+        noImagenes = findViewById(R.id.textView_noImagenes);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        adapter = new ImagenesEdicionDispositivoAdapter(listaImagenes, this, this, this);
+        recyclerView.setAdapter(adapter);
+
+        btnGaleria.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (ContextCompat.checkSelfPermission(EditarDispositivo.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(EditarDispositivo.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},Read_Permission);
+                    return;
+                }
+
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                }
+                //intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Seleccione una imagen"),PICK_IMAGE);
+            }
+        });
+
+        //SELECCIONAR IMAGENES
 
         TextInputLayout marca = findViewById(R.id.inputMarca_nuevodispositivo);
         marca.getEditText().addTextChangedListener(new TextWatcher() {
@@ -296,6 +353,28 @@ public class EditarDispositivo extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
+            if (data.getClipData() != null) {
+                int countOfImages = data.getClipData().getItemCount();
+                for (int i = 0; i < countOfImages; i++) {
+                    imageURL = data.getClipData().getItemAt(i).getUri();
+                    listaImagenes.add(imageURL);
+                }
+            } else {
+                imageURL = data.getData();
+                listaImagenes.add(imageURL);
+            }
+            noImagenes.setVisibility(View.GONE);
+            adapter.notifyDataSetChanged();
+        } else {
+            noImagenes.setVisibility(View.VISIBLE);
+        }
+    }
+
     //MODIFICAR
     public void validarRegistroDispositivo(View view) {
 
@@ -372,7 +451,14 @@ public class EditarDispositivo extends AppCompatActivity {
 
         Log.d("seleccionado", "tipoValido: " + tipoNuevoValido);
 
-        if (tipoValido && marcaValido && caracteristicasValido && incluyeValido && stockValido && tipoNuevoValido) {
+        if (listaImagenes.size()>=3) {
+            cantidadFotosValido = true;
+        } else {
+            Snackbar.make(view.findViewById(R.id.activity_editar_dispositivo), "Debe seleccionar un mínimo de 3 imágenes", Snackbar.LENGTH_LONG).show();
+            cantidadFotosValido = false;
+        }
+
+        if (tipoValido && marcaValido && caracteristicasValido && incluyeValido && stockValido && tipoNuevoValido && cantidadFotosValido) {
             Log.d("task", "Registro valido");
 
             //Guardar usuario en db
@@ -391,6 +477,7 @@ public class EditarDispositivo extends AppCompatActivity {
             dispositivo.setStock(Integer.parseInt(stock.getText().toString()));
             dispositivo.setVisible(true);
 
+            //AQUI NO OLVIDARSE DE LA SUBIDA DE LAS IMAGENES DE LA LISTA DE IMAGENES
             if (accion.equals("nuevo")) {
                 databaseReference.push().setValue(dispositivo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -483,5 +570,28 @@ public class EditarDispositivo extends AppCompatActivity {
                     }
                 });
         builder.show();
+    }
+
+    @Override
+    public void clicked(int getSize) {
+//        if (listaImagenes.size() != 0) {
+//            if (listaImagenes.size() == 1) {
+//                cantidadImagenes.setText(listaImagenes.size() + " imagen seleccionada");
+//            } else {
+//                cantidadImagenes.setText(listaImagenes.size() + " imágenes seleccionadas");
+//            }
+//        } else {
+//            noImagenes.setVisibility(View.VISIBLE);
+//            cantidadImagenes.setText("");
+//        }
+    }
+
+    @Override
+    public void itemClick(int position) {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.custom_dialog_zoom);
+        ImageView imagenDialog = dialog.findViewById(R.id.imageView2);
+        imagenDialog.setImageURI(listaImagenes.get(position));
+        dialog.show();
     }
 }
