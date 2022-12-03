@@ -87,7 +87,7 @@ public class ReservasFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference("reservas");
         valueEventListener = databaseReference.addValueEventListener(new ReservasFragment.listener());
 
-        AutoCompleteTextView spinner = view.findViewById(R.id.idMarca);
+        AutoCompleteTextView spinner = view.findViewById(R.id.idReserva);
         String[] arrayReservas = getResources().getStringArray(R.array.reservas);
         spinner.setText(arrayReservas[0],false);
         spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
