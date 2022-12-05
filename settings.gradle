@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "EquiposPUCP"
 include ':app'
+include ':openCV'

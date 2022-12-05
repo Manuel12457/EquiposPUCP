@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -17,9 +18,24 @@
         android:theme="@style/TemaEquiposPUCP"
         tools:targetApi="31">
         <activity
+            android:name=".ElegirUbicacionReserva"
+            android:exported="false" />
+        <activity
+            android:name=".DetalleUsuario"
+            android:exported="false" />
+        <activity
+            android:name=".NuevoUsuarioTI"
+            android:exported="false" />
+        <activity
+            android:name=".NuevaReserva"
+            android:exported="false" />
+        <activity
+            android:name=".DetallesReserva"
+            android:exported="false" />
+        <activity
             android:name=".DetallesDispositivo"
             android:exported="false"
-            android:parentActivityName=".Drawer"/>
+            android:parentActivityName=".Drawer" />
         <activity
             android:name=".EditarDispositivo"
             android:exported="false"

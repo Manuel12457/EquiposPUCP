@@ -2,6 +2,7 @@ package com.example.equipospucp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.CompositePageTransformer;
+import androidx.viewpager2.widget.MarginPageTransformer;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.EditarDispositivo;
@@ -19,6 +23,7 @@ import com.example.equipospucp.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class DispositivoDetalleAdapter extends RecyclerView.Adapter<DispositivoDetalleAdapter.DispositivoDetalleViewHolder> {
 
@@ -61,21 +66,41 @@ public class DispositivoDetalleAdapter extends RecyclerView.Adapter<DispositivoD
 
         holder.textViewdetalles.setText("Tipo: "+ dispositivo.getDispositivoDto().getTipo() +"\nMarca: " + dispositivo.getDispositivoDto().getMarca() + "\nStock: " + dispositivo.getDispositivoDto().getStock() + "\nEquipos reservados: ");
 
-        String caracteristicasenview = "Características:";
+        String caracteristicasenview = "";
         String caracteristicas = dispositivo.getDispositivoDto().getCaracteristicas();
         List<String> listadoCaracteristicas = Arrays.asList(caracteristicas.split("\\. "));
         for (String s : listadoCaracteristicas) {
-            caracteristicasenview = caracteristicasenview + "\n\t" + s;
+            caracteristicasenview = caracteristicasenview + s + "\n";
         }
         holder.textViewcaracteristicas.setText(caracteristicasenview);
 
-        String incluyeenview = "Incluye:";
+        String incluyeenview = "";
         String inlcuye = dispositivo.getDispositivoDto().getIncluye();
         List<String> listadoIncluye = Arrays.asList(inlcuye.split("\\. "));
         for (String s : listadoIncluye) {
-            incluyeenview = incluyeenview + "\n\t" + s;
+            incluyeenview = incluyeenview + s + "\n";
         }
         holder.textViewincluye.setText(incluyeenview);
+
+        //Slider - Descomentar para la visualización
+        //listaUri: lista con los uris de las imagenes
+//        holder.viewPagerImageSllider.setAdapter(new SliderAdapter(listaUri, holder.viewPagerImageSllider));
+//
+//        holder.viewPagerImageSllider.setClipToPadding(false);
+//        holder.viewPagerImageSllider.setClipChildren(false);
+//        holder.viewPagerImageSllider.setOffscreenPageLimit(3);
+//        holder.viewPagerImageSllider.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
+//        CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
+//        compositePageTransformer.addTransformer(new MarginPageTransformer(40));
+//        compositePageTransformer.addTransformer(new ViewPager2.PageTransformer() {
+//            @Override
+//            public void transformPage(@NonNull View page, float position) {
+//                float r = 1 - Math.abs(position);
+//                page.setScaleY(0.85f + r * 0.15f);
+//            }
+//        });
+//        holder.viewPagerImageSllider.setPageTransformer(compositePageTransformer);
+        //Slider
 
     }
 
@@ -86,13 +111,13 @@ public class DispositivoDetalleAdapter extends RecyclerView.Adapter<DispositivoD
         public TextView textViewdetalles;
         public TextView textViewcaracteristicas;
         public TextView textViewincluye;
-        public ImageView imageView;
+        private ViewPager2 viewPagerImageSllider;
         public DispositivoDetalleViewHolder(@NonNull View itemView) {
             super(itemView);
             this.textViewdetalles = itemView.findViewById(R.id.textView_marcastockreservas);
             this.textViewcaracteristicas = itemView.findViewById(R.id.textView_caracteristicas);
             this.textViewincluye = itemView.findViewById(R.id.textView_incluye);
-            this.imageView = itemView.findViewById(R.id.idImagenDispositivo);
+            this.viewPagerImageSllider = itemView.findViewById(R.id.viewPagerImageSlider);
         }
     }
 

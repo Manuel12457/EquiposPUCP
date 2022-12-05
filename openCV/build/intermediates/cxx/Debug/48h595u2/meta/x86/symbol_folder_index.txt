@@ -1,0 +1,1 @@
+/home/percy/AndroidStudioProjects/EquiposPUCP/openCV/build/intermediates/cxx/Debug/48h595u2/obj/x86

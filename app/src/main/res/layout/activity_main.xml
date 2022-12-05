@@ -33,7 +33,7 @@
     <Button
         android:id="@+id/btn_iniSesion"
         android:layout_width="160dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginTop="24dp"
         android:onClick="iniciarSesion"
         android:text="INICIAR SESIÓN"
@@ -44,23 +44,21 @@
     <Button
         android:id="@+id/btn_registro"
         android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="60dp"
         android:onClick="registroUsuario"
         android:text="REGISTRARSE"
-        app:layout_constraintEnd_toEndOf="@+id/btn_iniGoogle"
-        app:layout_constraintStart_toStartOf="@+id/btn_iniGoogle"
-        app:layout_constraintTop_toBottomOf="@+id/btn_iniGoogle" />
-
-    <Button
-        android:id="@+id/btn_iniGoogle"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="8dp"
-        android:onClick="registroUsuario"
-        android:text="INICIAR SESIÓN CON GOOGLE"
         app:layout_constraintEnd_toEndOf="@+id/btn_iniSesion"
         app:layout_constraintStart_toStartOf="@+id/btn_iniSesion"
         app:layout_constraintTop_toBottomOf="@+id/btn_iniSesion" />
+
+    <Button
+        android:id="@+id/btn_prueba"
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:onClick="hacerPrueba"
+        android:text="PROBAR FOTO BLUR"
+        app:layout_constraintEnd_toEndOf="@+id/btn_registro"
+        app:layout_constraintStart_toStartOf="@+id/btn_registro"
+        app:layout_constraintTop_toBottomOf="@+id/btn_registro" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

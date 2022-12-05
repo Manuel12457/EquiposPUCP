@@ -56,7 +56,7 @@
     <Button
         android:id="@+id/btn_ingreso"
         android:layout_width="210dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginTop="32dp"
         android:onClick="validarInicioSesion"
         android:text="INGRESAR"
@@ -67,7 +67,7 @@
     <Button
         android:id="@+id/btn_cambioContrasenia"
         android:layout_width="210dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginTop="8dp"
         android:onClick="cambiarContrasenia"
         android:text="CAMBIAR CONTRASEÑA"
@@ -75,11 +75,13 @@
         app:layout_constraintStart_toStartOf="@+id/btn_ingreso"
         app:layout_constraintTop_toBottomOf="@+id/btn_ingreso" />
 
-    <TextView
-        android:id="@+id/infoUsuario"
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/idProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
+        android:indeterminate="true"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/btn_cambioContrasenia"
         app:layout_constraintStart_toStartOf="@+id/btn_cambioContrasenia"
         app:layout_constraintTop_toBottomOf="@+id/btn_cambioContrasenia" />

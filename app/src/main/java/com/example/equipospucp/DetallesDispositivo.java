@@ -44,8 +44,6 @@ public class DetallesDispositivo extends AppCompatActivity {
 
         id = getIntent().getStringExtra("id");
         getSupportActionBar().setTitle(getIntent().getStringExtra("tipo"));
-        TextView t = findViewById(R.id.textView_tipodetalledispositivo);
-        t.setText(getIntent().getStringExtra("tipo"));
 
         databaseReference = FirebaseDatabase.getInstance().getReference("dispositivos");
 

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NuevaReserva">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvAlumno_Reserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:text="Hecha por:\nAlumno 20190133"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDispositivo_Reserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Dispositivo a reservar:\nCelular Samsung"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/tvAlumno_Reserva"
+                app:layout_constraintStart_toStartOf="@+id/tvAlumno_Reserva"
+                app:layout_constraintTop_toBottomOf="@+id/tvAlumno_Reserva" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputMotivo_Reserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Motivo"
+                android:visibility="visible"
+                app:counterEnabled="true"
+                app:counterMaxLength="500"
+                app:layout_constraintEnd_toEndOf="@+id/textView13"
+                app:layout_constraintStart_toStartOf="@+id/textView13"
+                app:layout_constraintTop_toBottomOf="@+id/textView13">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="302dp"
+                    android:layout_height="200dp"
+                    android:gravity="start|top"
+                    android:inputType="textLongMessage|textMultiLine|text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputCurso_Reserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Curso"
+                app:layout_constraintEnd_toEndOf="@+id/inputMotivo_Reserva"
+                app:layout_constraintStart_toStartOf="@+id/inputMotivo_Reserva"
+                app:layout_constraintTop_toBottomOf="@+id/inputMotivo_Reserva">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="302dp"
+                    android:layout_height="50dp"
+                    android:inputType="textShortMessage" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/textView14"
+                app:layout_constraintStart_toStartOf="@+id/textView14"
+                app:layout_constraintTop_toBottomOf="@+id/textView14">
+
+                <ImageButton
+                    android:id="@+id/minButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_minus" />
+
+                <TextView
+                    android:id="@+id/tvDias_Reserva"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:text="1"
+                    android:textSize="20sp" />
+
+                <ImageButton
+                    android:id="@+id/addButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_add" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Tiempo de reserva (dias)"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/inputCurso_Reserva"
+                app:layout_constraintStart_toStartOf="@+id/inputCurso_Reserva"
+                app:layout_constraintTop_toBottomOf="@+id/inputCurso_Reserva" />
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="DNI"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+            <ImageView
+                android:id="@+id/imageViewDNI"
+                android:layout_width="250dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/textView15"
+                app:layout_constraintHorizontal_bias="0.506"
+                app:layout_constraintStart_toStartOf="@+id/textView15"
+                app:layout_constraintTop_toBottomOf="@+id/textView15"
+                app:srcCompat="@drawable/ic_image" />
+
+            <ImageButton
+                android:id="@+id/imageButton_elegirDNI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="96dp"
+                android:onClick="obtenerImagen"
+                app:layout_constraintBottom_toBottomOf="@+id/imageViewDNI"
+                app:layout_constraintEnd_toEndOf="@+id/imageViewDNI"
+                app:srcCompat="@drawable/ic_edit" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputDetallesAdicionales_Reserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:hint="Detalles adicionales"
+                android:visibility="visible"
+                app:counterEnabled="true"
+                app:counterMaxLength="500"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/inputProgramas_Reserva"
+                app:layout_constraintStart_toStartOf="@+id/inputProgramas_Reserva"
+                app:layout_constraintTop_toBottomOf="@+id/inputProgramas_Reserva">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="302dp"
+                    android:layout_height="200dp"
+                    android:gravity="start|top"
+                    android:inputType="textLongMessage|textMultiLine|text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputProgramas_Reserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Programas a instalar"
+                android:visibility="visible"
+                app:counterEnabled="true"
+                app:counterMaxLength="500"
+                app:layout_constraintEnd_toEndOf="@+id/imageViewDNI"
+                app:layout_constraintStart_toStartOf="@+id/imageViewDNI"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewDNI">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="302dp"
+                    android:layout_height="200dp"
+                    android:gravity="start|top"
+                    android:inputType="textLongMessage|textMultiLine|text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_validarReserva"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_check" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

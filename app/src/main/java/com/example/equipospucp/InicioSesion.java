@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
@@ -18,6 +20,9 @@ import com.google.firebase.auth.FirebaseAuth;
 public class InicioSesion extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
+    Button btninisesion;
+    Button btncambiopassword;
+    CircularProgressIndicator circularProgressIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,9 @@ public class InicioSesion extends AppCompatActivity {
         getSupportActionBar().setTitle("Iniciar sesión");
 
         firebaseAuth = firebaseAuth.getInstance();
+        btninisesion = findViewById(R.id.btn_ingreso);
+        btncambiopassword = findViewById(R.id.btn_cambioContrasenia);
+        circularProgressIndicator = findViewById(R.id.idProgress);
 
         String mensaje_exito = getIntent().getStringExtra("exito");
         if (mensaje_exito != null && !mensaje_exito.equals("")) {
@@ -40,6 +48,11 @@ public class InicioSesion extends AppCompatActivity {
     }
 
     public void validarInicioSesion(View view) {
+
+        btninisesion.setEnabled(false);
+        btncambiopassword.setEnabled(false);
+        circularProgressIndicator.setVisibility(View.VISIBLE);
+
         TextInputLayout correo = findViewById(R.id.inputCorreo_iniSesion);
         TextInputLayout password = findViewById(R.id.inputPassword_iniSesion);
 
@@ -106,6 +119,7 @@ public class InicioSesion extends AppCompatActivity {
 
                                     Intent intent = new Intent(InicioSesion.this, Drawer.class);
                                     startActivity(intent);
+                                    finish();
                                 } else {
                                     Snackbar.make(findViewById(R.id.activity_iniciar_sesion), "Su cuenta no ha sido verificada. Verifíquela para poder ingresar", Snackbar.LENGTH_LONG).show();
                                 }
@@ -113,6 +127,9 @@ public class InicioSesion extends AppCompatActivity {
                         });
 
                     } else {
+                        btninisesion.setEnabled(true);
+                        btncambiopassword.setEnabled(true);
+                        circularProgressIndicator.setVisibility(View.GONE);
                         Log.d("task", "ERROR EN REGISTRO - " + task.getException().getMessage());
                         //Ver bien mensaje de error
                         Snackbar.make(findViewById(R.id.activity_iniciar_sesion), task.getException().getMessage(), Snackbar.LENGTH_LONG).show();

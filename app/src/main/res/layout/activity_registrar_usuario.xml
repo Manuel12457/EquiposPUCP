@@ -9,7 +9,7 @@
     <Button
         android:id="@+id/btn_registrarseForm"
         android:layout_width="160dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginTop="24dp"
         android:onClick="validarRegistro"
         android:text="REGISTRARSE"
@@ -73,6 +73,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:hint="Codigo"
+        app:counterEnabled="true"
+        app:counterMaxLength="8"
         app:layout_constraintEnd_toEndOf="@+id/textView4"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="@+id/textView4"
@@ -89,7 +91,7 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="96dp"
         android:text="Registro de usuario"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -114,5 +116,16 @@
             app:simpleItems="@array/roles" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/idProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/btn_registrarseForm"
+        app:layout_constraintStart_toStartOf="@+id/btn_registrarseForm"
+        app:layout_constraintTop_toBottomOf="@+id/btn_registrarseForm" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

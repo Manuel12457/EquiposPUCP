@@ -10,17 +10,35 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
+import com.example.equipospucp.DTOs.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class CambioContrasenia extends AppCompatActivity {
+
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReferenceCorreos;
+    ValueEventListener valueEventListener;
+    ArrayList<String> listaCorreosRegistrados = new ArrayList<>();
+
+    Button btn;
+    CircularProgressIndicator circularProgressIndicator;
 
     boolean correoValido = true;
     int vecesCorreo = 0;
@@ -31,6 +49,13 @@ public class CambioContrasenia extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cambio_contrasenia);
         getSupportActionBar().setTitle("Cambio de contraseña");
+
+        btn = findViewById(R.id.btn_enviarCorreo);
+        circularProgressIndicator = findViewById(R.id.idProgress);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReferenceCorreos = firebaseDatabase.getReference("usuarios");
+        valueEventListener = databaseReferenceCorreos.addValueEventListener(new CambioContrasenia.listener());
 
         TextInputLayout correo = findViewById(R.id.inputCorreo_cambioPsw);
         correo.getEditText().addTextChangedListener(new TextWatcher() {
@@ -82,6 +107,9 @@ public class CambioContrasenia extends AppCompatActivity {
     }
 
     public void validarCorreo(View view) {
+
+        btn.setEnabled(false);
+        circularProgressIndicator.setVisibility(View.VISIBLE);
         TextInputLayout correo = findViewById(R.id.inputCorreo_cambioPsw);
 
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z.]+";
@@ -95,8 +123,14 @@ public class CambioContrasenia extends AppCompatActivity {
                 correoValido = false;
             } else {
                 //Validar si usuario existe en el sistema
-                vecesCorreo++;
-                correo.setErrorEnabled(false);
+                if (listaCorreosRegistrados.contains(correo.getEditText().getText().toString())) {
+                    vecesCorreo++;
+                    correo.setErrorEnabled(false);
+                } else {
+                    vecesCorreo++;
+                    correo.setError("El correo ingresado no ha sido registrado");
+                    correoValido = false;
+                }
             }
         } else {
             //Texto NO ha sido ingresado en el edittext
@@ -115,21 +149,59 @@ public class CambioContrasenia extends AppCompatActivity {
 //            intent.putExtra("codigo", codigo);
 //            startActivity(intent);
 
-            firebaseAuth.sendPasswordResetEmail(correo.getEditText().getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+            firebaseAuth.getCurrentUser().reload().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
-                public void onSuccess(Void unused) {
-                    //Esconder edittext y cambiar texto
-                    Log.d("forgetpsw", "Correo enviado para cambio de contrasenia");
-                    Intent intent = new Intent(CambioContrasenia.this, InicioSesion.class);
-                    intent.putExtra("exito", "Se le ha enviado un correo para proceder con la solicitud de cambio de contraseña");
-                    startActivity(intent);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("forgetpsw", "Ourrio un error - " + e.getMessage());
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+                        firebaseAuth.sendPasswordResetEmail(correo.getEditText().getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                //Esconder edittext y cambiar texto
+                                Log.d("forgetpsw", "Correo enviado para cambio de contrasenia");
+                                Intent intent = new Intent(CambioContrasenia.this, InicioSesion.class);
+                                intent.putExtra("exito", "Se le ha enviado un correo para proceder con la solicitud de cambio de contraseña");
+                                startActivity(intent);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("forgetpsw", "Ourrio un error - " + e.getMessage());
+                            }
+                        });
+                    } else {
+                        btn.setEnabled(true);
+                        circularProgressIndicator.setVisibility(View.GONE);
+                        Snackbar.make(findViewById(R.id.activity_cambiar_contrasenia), "Su cuenta no ha sido verificada. Verifíquela para poder ingresar", Snackbar.LENGTH_LONG).show();
+                    }
                 }
             });
         }
+    }
+
+    class listener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                listaCorreosRegistrados.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Usuario usuario = ds.getValue(Usuario.class);
+                    listaCorreosRegistrados.add(usuario.getCorreo());
+                }
+            } else {
+                listaCorreosRegistrados.clear();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.e("msg", "Error onCancelled", error.toException());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        databaseReferenceCorreos.removeEventListener(valueEventListener);
+        super.onDestroy();
     }
 }
