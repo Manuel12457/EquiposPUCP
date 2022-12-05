@@ -33,6 +33,7 @@ public class EditarDispositivo extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
 
+
     boolean tipoNuevoValido = true;
 
     boolean tipoValido = true;
@@ -390,6 +391,7 @@ public class EditarDispositivo extends AppCompatActivity {
             dispositivo.setVisible(true);
 
             if (accion.equals("nuevo")) {
+                //Guarda el dispositivo
                 databaseReference.push().setValue(dispositivo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
