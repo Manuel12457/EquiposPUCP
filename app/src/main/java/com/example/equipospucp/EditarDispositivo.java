@@ -42,13 +42,17 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class EditarDispositivo extends AppCompatActivity implements ImagenesEdicionDispositivoAdapter.CountOfImagesWhenRemoved, ImagenesEdicionDispositivoAdapter.ItemClickListener {
 
     FirebaseAuth firebaseAuth;
     FirebaseDatabase firebaseDatabase;
+    StorageReference storageReference;
 
     private Uri imageURL;
     RecyclerView recyclerView;
@@ -91,6 +95,7 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
 
         firebaseAuth = firebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         //SELECCIONAR IMAGENES
         btnGaleria = findViewById(R.id.btn_elegirImagenes);
@@ -479,7 +484,21 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
 
             //AQUI NO OLVIDARSE DE LA SUBIDA DE LAS IMAGENES DE LA LISTA DE IMAGENES
             if (accion.equals("nuevo")) {
-                databaseReference.push().setValue(dispositivo)
+                String key = databaseReference.push().getKey();
+                for (Uri imageUri: listaImagenes) {
+                    if (imageUri != null){
+                        String[] path= imageUri.toString().split("/");
+                        String filename = path[path.length-1];
+                        StorageReference imageReference = storageReference.child("img/"+filename);
+                        imageReference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+                            HashMap<String,String> map = new HashMap<>();
+                            map.put("dispositivo",key);
+                            map.put("imagen",filename);
+                            databaseReference.child("imagenes").push().setValue(map);
+                        });
+                    }
+                }
+                databaseReference.child(key).setValue(dispositivo)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
