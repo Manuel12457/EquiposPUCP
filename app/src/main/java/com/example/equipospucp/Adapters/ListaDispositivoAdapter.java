@@ -11,16 +11,29 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
+import com.example.equipospucp.DTOs.Image;
 import com.example.equipospucp.DetallesDispositivo;
 import com.example.equipospucp.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListaDispositivoAdapter extends RecyclerView.Adapter<ListaDispositivoAdapter.ListaDispositivosViewHolder> {
 
     private ArrayList<DispositivoDetalleDto> listaDispositivos;
     private Context context;
+    StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("imagenes");
+
 
     public ListaDispositivoAdapter(ArrayList<DispositivoDetalleDto> listaDispositivos, Context context) {
         this.setListaDispositivos(listaDispositivos);
@@ -55,17 +68,26 @@ public class ListaDispositivoAdapter extends RecyclerView.Adapter<ListaDispositi
 
         DispositivoDetalleDto dispositivo = getListaDispositivos().get(position);
         //Cambiarlo por imagen en firebase db. Colocar imagen por defecto si no posee
-        if (dispositivo.getDispositivoDto().getTipo().equals("Laptops")) {
-            holder.imageView.setImageResource(R.drawable.ic_laptop);
-        } else if (dispositivo.getDispositivoDto().getTipo().equals("Monitores")) {
-            holder.imageView.setImageResource(R.drawable.ic_monitor);
-        } else if (dispositivo.getDispositivoDto().getTipo().equals("Celulares")) {
-            holder.imageView.setImageResource(R.drawable.ic_celular);
-        } else if (dispositivo.getDispositivoDto().getTipo().equals("Tablets")) {
-            holder.imageView.setImageResource(R.drawable.ic_tablet);
-        } else {
-            holder.imageView.setImageResource(R.drawable.ic_otros);
-        }
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                StorageReference imageRef;
+                for (DataSnapshot children : snapshot.getChildren()){
+                    Image image =children.getValue(Image.class);
+                    if (image.getDispositivo().equals(dispositivo.getId())){
+                        imageRef = storageReference.child("img/"+image.getImagen());
+                        Glide.with(getContext()).load(imageRef).into(holder.imageView);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         holder.textView.setText(dispositivo.getDispositivoDto().getTipo() + " " + dispositivo.getDispositivoDto().getMarca() + "\n" + "Stock: " + dispositivo.getDispositivoDto().getStock());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

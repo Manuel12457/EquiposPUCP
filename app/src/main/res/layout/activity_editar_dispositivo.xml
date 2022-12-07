@@ -7,10 +7,13 @@
     android:id="@+id/activity_editar_dispositivo"
     tools:context=".EditarDispositivo">
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        tools:layout_editor_absoluteX="39dp"
+        tools:layout_editor_absoluteY="-236dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -195,8 +198,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_guardardispositivo"
