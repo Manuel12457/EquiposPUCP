@@ -55,13 +55,18 @@
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/activity_detalle_usuario.xml" value="0.22604166666666667" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/activity_detalles_reserva.xml" value="0.22604166666666667" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/activity_editar_dispositivo.xml" value="0.22604166666666667" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/activity_nuevo_usuario_ti.xml" value="0.22708333333333333" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/activity_registrar_usuario.xml" value="0.22604166666666667" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/fragment_blank.xml" value="0.15918367346938775" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/fragment_estadisticas.xml" value="0.23489583333333333" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/fragment_profile.xml" value="0.22708333333333333" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/fragment_usuarios.xml" value="0.23489583333333333" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/fragment_usuarios_t_i.xml" value="0.23489583333333333" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/header.xml" value="0.23489583333333333" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/item_marcas.xml" value="0.22604166666666667" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/item_reservas.xml" value="0.22604166666666667" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/item_usuario.xml" value="0.22708333333333333" />
+        <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/profile_fragment.xml" value="0.22708333333333333" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/layout/reservas_fragment.xml" value="0.22604166666666667" />
         <entry key="..\:/Users/LENOVO/AndroidStudioProjects/EquiposPUCPFinal/app/src/main/res/menu/navigation_drawer.xml" value="0.23489583333333333" />
       </map>

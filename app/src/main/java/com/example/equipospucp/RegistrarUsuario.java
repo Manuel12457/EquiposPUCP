@@ -372,6 +372,8 @@ public class RegistrarUsuario extends AppCompatActivity {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.d("registro", "USUARIO NO GUARDADO - " + e.getMessage());
+                                        btn.setEnabled(true);
+                                        circularProgressIndicator.setVisibility(View.GONE);
                                     }
                                 });
 

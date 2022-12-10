@@ -1,16 +1,17 @@
 package com.example.equipospucp.Fragments;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.equipospucp.DTOs.Usuario;
 import com.example.equipospucp.R;
@@ -24,12 +25,14 @@ public class ProfileFragment extends Fragment {
 
     FirebaseAuth firebaseAuth;
     Usuario usuario;
+    ImageButton editarFoto;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile_fragment,container,false);
 
+        editarFoto = view.findViewById(R.id.imageButtonEditarFoto);
         firebaseAuth = firebaseAuth.getInstance();
         String id = firebaseAuth.getCurrentUser().getUid();
         System.out.println(id);
@@ -50,9 +53,8 @@ public class ProfileFragment extends Fragment {
                             codigo.setText(usuario.getCodigo());
                             rol.setText(usuario.getRol());
 
-                            ImageButton imageButton = view.findViewById(R.id.imageButtonEditarFotoUsuario);
                             if (usuario.getRol().equals("Admin")) {
-                                imageButton.setVisibility(View.GONE);
+                                editarFoto.setVisibility(View.GONE);
                             }
 
                             correo.setText("Correo con el cual se ha registrado\n" + usuario.getCorreo());

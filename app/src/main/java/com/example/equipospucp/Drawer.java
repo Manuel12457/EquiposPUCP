@@ -19,10 +19,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.equipospucp.DTOs.Usuario;
 import com.example.equipospucp.Fragments.DispositivosFragment;
 import com.example.equipospucp.Fragments.EstadisticasFragment;
@@ -38,7 +34,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
 public class Drawer extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
