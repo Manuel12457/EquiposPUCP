@@ -8,24 +8,28 @@
     android:padding="20dp">
 
     <ImageView
+        android:id="@+id/imagenUsuario"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="70dp"
         android:src="@drawable/defaultpp" />
 
     <TextView
+        android:id="@+id/codigoUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="20190133"
         android:textAppearance="?attr/textAppearanceHeadlineSmall"
-        android:textColor="?attr/colorOnSurface" />
+        android:textColor="?attr/colorOnPrimary" />
 
     <TextView
+        android:id="@+id/rolUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Usuario TI"
         android:textAppearance="?attr/textAppearanceTitleSmall"
-        android:textColor="?attr/colorOnSurfaceVariant" />
+        android:textColor="?attr/colorOnSurfaceInverse"
+        android:textSize="16sp" />
 
 </LinearLayout>

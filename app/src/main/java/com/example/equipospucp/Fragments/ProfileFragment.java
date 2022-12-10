@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,12 @@ public class ProfileFragment extends Fragment {
 
                             codigo.setText(usuario.getCodigo());
                             rol.setText(usuario.getRol());
+
+                            ImageButton imageButton = view.findViewById(R.id.imageButtonEditarFotoUsuario);
+                            if (usuario.getRol().equals("Admin")) {
+                                imageButton.setVisibility(View.GONE);
+                            }
+
                             correo.setText("Correo con el cual se ha registrado\n" + usuario.getCorreo());
                         }
                     }

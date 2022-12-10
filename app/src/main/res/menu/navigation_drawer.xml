@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-            <item
-                android:id="@+id/profile_item"
-                android:checkable="true"
-                android:title="Ver perfil"
-                app:showAsAction="ifRoom" />
-            <item
-                android:id="@+id/devices_item"
-                android:title="Dispositivos"
-                android:checkable="true"
-                app:showAsAction="ifRoom"/>
-            <item
-                android:id="@+id/reservations_item"
-                android:title="Reservas"
-                android:checkable="true"
-                app:showAsAction="ifRoom"/>
-            <item
-                android:id="@+id/logout_item"
-                android:title="Cerrar sesión"
-                android:checkable="true"
-                app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/profile_item"
+        android:checkable="true"
+        android:title="Ver perfil"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/devices_item"
+        android:checkable="true"
+        android:title="Dispositivos"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/reservations_item"
+        android:checkable="true"
+        android:title="Reservas"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/usuariosti_item"
+        android:checkable="true"
+        android:title="Usuarios TI"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/estadisticas_item"
+        android:checkable="true"
+        android:title="Estadísticas"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/usuarios_item"
+        android:checkable="true"
+        android:title="Lista de usuarios"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/logout_item"
+        android:checkable="true"
+        android:title="Cerrar sesión"
+        app:showAsAction="ifRoom" />
 
 </menu>

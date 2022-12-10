@@ -3,6 +3,7 @@ package com.example.equipospucp.Fragments;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,8 +22,10 @@ import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.Dispositivo;
 import com.example.equipospucp.DTOs.Reserva;
 import com.example.equipospucp.DTOs.ReservaDto;
+import com.example.equipospucp.DTOs.Usuario;
 import com.example.equipospucp.R;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,6 +60,9 @@ public class ReservasFragment extends Fragment {
     Calendar menosdossemanas = Calendar.getInstance();
     Date fechahorareserva;
 
+    Usuario usuario;
+    boolean esUsuarioTI = false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -85,7 +91,27 @@ public class ReservasFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         databaseReference = FirebaseDatabase.getInstance().getReference("reservas");
-        valueEventListener = databaseReference.addValueEventListener(new ReservasFragment.listener());
+
+        FirebaseDatabase.getInstance().getReference("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        System.out.println("ONDATACHANGE - AFUERA DEL IF");
+                        if (snapshot.exists()) { //Nodo referente existe
+                            usuario = snapshot.getValue(Usuario.class);
+                            if (usuario.getRol().equals("Usuario TI")) {
+                                esUsuarioTI = true;
+                            }
+                            valueEventListener = databaseReference.addValueEventListener(new ReservasFragment.listener());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        System.out.println("ONCANCELLED");
+                        Log.e("msg", "Error onCancelled", error.toException());
+                    }
+                });
 
         AutoCompleteTextView spinner = view.findViewById(R.id.idReserva);
         String[] arrayReservas = getResources().getStringArray(R.array.reservas);
@@ -106,6 +132,8 @@ public class ReservasFragment extends Fragment {
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (snapshot.exists()) { //Nodo referente existe
                 listaReservas.clear();
+
+                //Si esUsuarioTI es true, deberan mostrarse todas las reservas, sino, solo las que posean la id del usuario cliente
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Reserva reserva = ds.getValue(Reserva.class);
@@ -144,6 +172,7 @@ public class ReservasFragment extends Fragment {
                 }
                 adapter.notifyDataSetChanged();
             } else {
+                noreservas.setVisibility(View.VISIBLE);
                 listaReservas.clear();
                 adapter.notifyDataSetChanged();
             }

@@ -15,10 +15,13 @@ import android.widget.TextView;
 import com.example.equipospucp.Adapters.DispositivoDetalleAdapter;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.Dispositivo;
+import com.example.equipospucp.DTOs.Usuario;
+import com.example.equipospucp.Fragments.ReservasFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,11 +39,35 @@ public class DetallesDispositivo extends AppCompatActivity {
 
     ArrayList<DispositivoDetalleDto> listaDispositivos;
     String id;
+    Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalles_dispositivo);
+
+        FloatingActionButton editar = findViewById(R.id.editarDispositivo);
+        FloatingActionButton eliminar = findViewById(R.id.eliminarDispositivo);
+        FirebaseDatabase.getInstance().getReference("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        System.out.println("ONDATACHANGE - AFUERA DEL IF");
+                        if (snapshot.exists()) { //Nodo referente existe
+                            usuario = snapshot.getValue(Usuario.class);
+                            if (!usuario.getRol().equals("Usuario TI")) {
+                                editar.setVisibility(View.GONE);
+                                eliminar.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        System.out.println("ONCANCELLED");
+                        Log.e("msg", "Error onCancelled", error.toException());
+                    }
+                });
 
         id = getIntent().getStringExtra("id");
         getSupportActionBar().setTitle(getIntent().getStringExtra("tipo"));
@@ -56,7 +83,6 @@ public class DetallesDispositivo extends AppCompatActivity {
 
         valueEventListener = databaseReference.addValueEventListener(new listener());
 
-        FloatingActionButton editar = findViewById(R.id.editarDispositivo);
         editar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,7 +94,6 @@ public class DetallesDispositivo extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton eliminar = findViewById(R.id.eliminarDispositivo);
         eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

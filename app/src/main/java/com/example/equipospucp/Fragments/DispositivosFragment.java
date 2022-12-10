@@ -16,10 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.equipospucp.Adapters.ListaTipoDispositivoAdapter;
 import com.example.equipospucp.DTOs.Dispositivo;
 import com.example.equipospucp.DTOs.TipoDispositivoDto;
+import com.example.equipospucp.DTOs.Usuario;
 import com.example.equipospucp.EditarDispositivo;
 import com.example.equipospucp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,10 +44,33 @@ public class DispositivosFragment extends Fragment {
     ArrayList<String> listaMarcasTablet = new ArrayList<>();
     ArrayList<String> listaMarcasOtro = new ArrayList<>();
 
+    Usuario usuario;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dispositivos_fragment,container,false);
+
+        FloatingActionButton button = view.findViewById(R.id.fab_nuevodispositivo);
+        FirebaseDatabase.getInstance().getReference("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        System.out.println("ONDATACHANGE - AFUERA DEL IF");
+                        if (snapshot.exists()) { //Nodo referente existe
+                            usuario = snapshot.getValue(Usuario.class);
+                            if (!usuario.getRol().equals("Usuario TI")) {
+                                button.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        System.out.println("ONCANCELLED");
+                        Log.e("msg", "Error onCancelled", error.toException());
+                    }
+                });
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -55,7 +80,6 @@ public class DispositivosFragment extends Fragment {
             }
         }
 
-        FloatingActionButton button = view.findViewById(R.id.fab_nuevodispositivo);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
