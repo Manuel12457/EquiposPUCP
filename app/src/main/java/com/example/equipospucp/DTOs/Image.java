@@ -4,6 +4,8 @@ public class Image {
     private String dispositivo;
     private String imagen;
 
+    public Image() {}
+
     public Image(String dispositivo, String imagen) {
         this.dispositivo = dispositivo;
         this.imagen = imagen;

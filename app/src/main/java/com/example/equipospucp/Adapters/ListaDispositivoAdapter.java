@@ -2,6 +2,7 @@ package com.example.equipospucp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,8 +76,9 @@ public class ListaDispositivoAdapter extends RecyclerView.Adapter<ListaDispositi
                 for (DataSnapshot children : snapshot.getChildren()){
                     Image image =children.getValue(Image.class);
                     if (image.getDispositivo().equals(dispositivo.getId())){
-                        imageRef = storageReference.child("img/"+image.getImagen());
-                        Glide.with(getContext()).load(imageRef).into(holder.imageView);
+                        //imageRef = storageReference.child("img/"+image.getImagen());
+                        Log.d("ruta", "img/"+image.getImagen());
+                        Glide.with(getContext()).load(storageReference.child("img/"+image.getImagen())).into(holder.imageView);
                         break;
                     }
                 }

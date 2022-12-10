@@ -11,26 +11,21 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.equipospucp.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 
 public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderViewHolder> {
 
-    private ArrayList<Uri> listaImagenes;
+    private ArrayList<String> listaImagenes;
     private ViewPager2 viewPager2;
+    StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
-    public SliderAdapter(ArrayList<Uri> listaImagenes, ViewPager2 viewPager2) {
+    public SliderAdapter(ArrayList<String> listaImagenes, ViewPager2 viewPager2) {
         this.setListaImagenes(listaImagenes);
         this.setViewPager2(viewPager2);
-    }
-
-    public ArrayList<Uri> getListaImagenes() {
-        return listaImagenes;
-    }
-
-    public void setListaImagenes(ArrayList<Uri> listaImagenes) {
-        this.listaImagenes = listaImagenes;
     }
 
     @NonNull
@@ -58,6 +53,14 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
         this.viewPager2 = viewPager2;
     }
 
+    public ArrayList<String> getListaImagenes() {
+        return listaImagenes;
+    }
+
+    public void setListaImagenes(ArrayList<String> listaImagenes) {
+        this.listaImagenes = listaImagenes;
+    }
+
     public class SliderViewHolder extends RecyclerView.ViewHolder {
         private RoundedImageView imagen;
         public SliderViewHolder(@NonNull View itemView) {
@@ -65,9 +68,9 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
             this.imagen = itemView.findViewById(R.id.imageSlide);
         }
 
-        void setImage(Uri uri) {
+        void setImage(String uri) {
             Glide.with(getViewPager2().getContext())
-                    .load(uri)
+                    .load(storageReference.child(uri))
                     .into(this.imagen);
         }
     }

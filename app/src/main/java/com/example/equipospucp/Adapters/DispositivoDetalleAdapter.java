@@ -16,9 +16,17 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
+import com.example.equipospucp.DTOs.Image;
 import com.example.equipospucp.EditarDispositivo;
 import com.example.equipospucp.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +37,7 @@ public class DispositivoDetalleAdapter extends RecyclerView.Adapter<DispositivoD
 
     private ArrayList<DispositivoDetalleDto> listaDispositivos;
     private Context context;
+    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("imagenes");
 
     public DispositivoDetalleAdapter(ArrayList<DispositivoDetalleDto> listaDispositivos, Context context) {
         this.setListaDispositivos(listaDispositivos);
@@ -84,22 +93,43 @@ public class DispositivoDetalleAdapter extends RecyclerView.Adapter<DispositivoD
 
         //Slider - Descomentar para la visualización
         //listaUri: lista con los uris de las imagenes
-//        holder.viewPagerImageSllider.setAdapter(new SliderAdapter(listaUri, holder.viewPagerImageSllider));
-//
-//        holder.viewPagerImageSllider.setClipToPadding(false);
-//        holder.viewPagerImageSllider.setClipChildren(false);
-//        holder.viewPagerImageSllider.setOffscreenPageLimit(3);
-//        holder.viewPagerImageSllider.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
-//        CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
-//        compositePageTransformer.addTransformer(new MarginPageTransformer(40));
-//        compositePageTransformer.addTransformer(new ViewPager2.PageTransformer() {
-//            @Override
-//            public void transformPage(@NonNull View page, float position) {
-//                float r = 1 - Math.abs(position);
-//                page.setScaleY(0.85f + r * 0.15f);
-//            }
-//        });
-//        holder.viewPagerImageSllider.setPageTransformer(compositePageTransformer);
+        ArrayList<String> listaImageRef = new ArrayList<>();
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                StorageReference imageRef;
+                for (DataSnapshot children : snapshot.getChildren()){
+                    Image image =children.getValue(Image.class);
+                    if (image.getDispositivo().equals(dispositivo.getId())){
+                        Log.d("ruta", "img/"+image.getImagen());
+                        listaImageRef.add("img/"+image.getImagen());
+                    }
+                }
+
+                holder.viewPagerImageSllider.setAdapter(new SliderAdapter(listaImageRef, holder.viewPagerImageSllider));
+
+                holder.viewPagerImageSllider.setClipToPadding(false);
+                holder.viewPagerImageSllider.setClipChildren(false);
+                holder.viewPagerImageSllider.setOffscreenPageLimit(3);
+                holder.viewPagerImageSllider.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
+                CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
+                compositePageTransformer.addTransformer(new MarginPageTransformer(40));
+                compositePageTransformer.addTransformer(new ViewPager2.PageTransformer() {
+                    @Override
+                    public void transformPage(@NonNull View page, float position) {
+                        float r = 1 - Math.abs(position);
+                        page.setScaleY(0.85f + r * 0.15f);
+                    }
+                });
+                holder.viewPagerImageSllider.setPageTransformer(compositePageTransformer);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         //Slider
 
     }
