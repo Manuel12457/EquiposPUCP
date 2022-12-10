@@ -36,8 +36,10 @@ import com.example.equipospucp.Adapters.ImagenesEdicionDispositivoAdapter;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.Dispositivo;
 import com.example.equipospucp.DTOs.Image;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -337,6 +339,9 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
             marca.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getMarca());
             caracteristicas.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getCaracteristicas());
             incluye.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getIncluye());
+            recyclerView.setLayoutManager(new LinearLayoutManager(EditarDispositivo.this, LinearLayoutManager.HORIZONTAL, false));
+            adapter = new ImagenesEdicionDispositivoAdapter(listaImagenes, EditarDispositivo.this, EditarDispositivo.this, EditarDispositivo.this);
+            recyclerView.setAdapter(adapter);
             //Añadimos las fotos
             firebaseDatabase.getReference().child("imagenes").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -345,19 +350,24 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
                         Image image = children.getValue(Image.class);
                         if(image.getDispositivo().equals(dispositivoDetalleDto.getId())){
                             StorageReference imageRef = storageReference.child("img/"+image.getImagen());
-                            Uri uri = imageRef.getDownloadUrl().getResult();
-                            listaImagenes.add(uri);
+                            imageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    Uri uri = task.getResult();
+                                    System.out.println("uri: "+uri.toString());
+                                    listaImagenes.add(uri);
+                                    noImagenes.setVisibility(View.GONE);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
                         }
                     }
-                    recyclerView.setLayoutManager(new LinearLayoutManager(EditarDispositivo.this, LinearLayoutManager.HORIZONTAL, false));
-                    adapter = new ImagenesEdicionDispositivoAdapter(listaImagenes, EditarDispositivo.this, EditarDispositivo.this, EditarDispositivo.this);
-                    recyclerView.setAdapter(adapter);
+
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
-
             spinnera.setEnabled(false);
             spinner.setEnabled(false);
 
