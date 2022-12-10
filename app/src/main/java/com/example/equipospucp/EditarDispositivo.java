@@ -398,7 +398,7 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        listaImagenes.clear();
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK && null != data) {
             if (data.getClipData() != null) {
                 int countOfImages = data.getClipData().getItemCount();
