@@ -30,23 +30,29 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.equipospucp.Adapters.ImagenesEdicionDispositivoAdapter;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.Dispositivo;
+import com.example.equipospucp.DTOs.Image;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class EditarDispositivo extends AppCompatActivity implements ImagenesEdicionDispositivoAdapter.CountOfImagesWhenRemoved, ImagenesEdicionDispositivoAdapter.ItemClickListener {
 
@@ -326,10 +332,31 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
         if (accion.equals("nuevo")) {
             getSupportActionBar().setTitle("Nuevo dispositivo");
         } else {
+            //Variables utilizadas
             stock.setText(String.valueOf(dispositivoDetalleDto.getDispositivoDto().getStock()));
             marca.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getMarca());
             caracteristicas.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getCaracteristicas());
             incluye.getEditText().setText(dispositivoDetalleDto.getDispositivoDto().getIncluye());
+            //Añadimos las fotos
+            firebaseDatabase.getReference().child("imagenes").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot children : snapshot.getChildren()){
+                        Image image = children.getValue(Image.class);
+                        if(image.getDispositivo().equals(dispositivoDetalleDto.getId())){
+                            StorageReference imageRef = storageReference.child("img/"+image.getImagen());
+                            Uri uri = imageRef.getDownloadUrl().getResult();
+                            listaImagenes.add(uri);
+                        }
+                    }
+                    recyclerView.setLayoutManager(new LinearLayoutManager(EditarDispositivo.this, LinearLayoutManager.HORIZONTAL, false));
+                    adapter = new ImagenesEdicionDispositivoAdapter(listaImagenes, EditarDispositivo.this, EditarDispositivo.this, EditarDispositivo.this);
+                    recyclerView.setAdapter(adapter);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
 
             spinnera.setEnabled(false);
             spinner.setEnabled(false);
@@ -520,6 +547,40 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
+                                //Eliminar Todas las fotos en database
+                                databaseReference.child("imagenes").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        for (DataSnapshot children : snapshot.getChildren()){
+                                            Image image = children.getValue(Image.class);
+                                            /**Validamos que el dispositivo vinculado a la imagen sea el mismo que esta siendo editado
+                                             * en caso que lo sea se procede eliminar tanto la imagen del firebase storage como en la relacion
+                                             * Dispositivo - imagen guardados**/
+                                            if (image.getDispositivo().equals(dispositivoDetalleDto.getId())){
+                                                //Se procede a eliminar la imagen
+                                                storageReference.child("img/"+image.getImagen()).delete();
+                                                databaseReference.child("imagenes").child(children.getKey()).removeValue();
+                                            }
+                                        }
+                                        Toast.makeText(EditarDispositivo.this,"Imagenes eliminadas se procedera a subir las nuevsa imagenes",Toast.LENGTH_SHORT);
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {}
+                                });
+                                //Se guardan todas las fotos que estan en listaImagenes
+                                for (Uri imageUri: listaImagenes) {
+                                    if (imageUri != null){
+                                        String[] path= imageUri.toString().split("/");
+                                        String filename = path[path.length-1];
+                                        StorageReference imageReference = storageReference.child("img/"+filename);
+                                        imageReference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+                                            HashMap<String,String> map = new HashMap<>();
+                                            map.put("dispositivo",dispositivoDetalleDto.getId());
+                                            map.put("imagen",filename);
+                                            databaseReference.child("imagenes").push().setValue(map);
+                                        });
+                                    }
+                                }
                                 Log.d("registro", "DISPOSITIVO GUARDADO");
                                 Intent intent = new Intent(EditarDispositivo.this, Drawer.class);
                                 intent.putExtra("exito", "El dispositivo se ha editado exitosamente");
