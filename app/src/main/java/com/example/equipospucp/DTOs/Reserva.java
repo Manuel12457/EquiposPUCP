@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Reserva implements Serializable {
 
-    private UsuarioDto usuario;
-    private DispositivoDetalleDto dispositivo;
+    private String idUsuario;
+    private String iddispositivo;
     private String fechayhora;
     private String motivo;
     private String curso;
@@ -97,19 +97,19 @@ public class Reserva implements Serializable {
         this.fechayhora = fechayhora;
     }
 
-    public UsuarioDto getUsuario() {
-        return usuario;
+    public String getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(UsuarioDto usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public DispositivoDetalleDto getDispositivo() {
-        return dispositivo;
+    public String getIddispositivo() {
+        return iddispositivo;
     }
 
-    public void setDispositivo(DispositivoDetalleDto dispositivo) {
-        this.dispositivo = dispositivo;
+    public void setIddispositivo(String iddispositivo) {
+        this.iddispositivo = iddispositivo;
     }
 }

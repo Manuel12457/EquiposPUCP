@@ -44,14 +44,14 @@
                 android:id="@+id/inputMotivo_Reserva"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:hint="Motivo"
                 android:visibility="visible"
                 app:counterEnabled="true"
                 app:counterMaxLength="500"
-                app:layout_constraintEnd_toEndOf="@+id/textView13"
-                app:layout_constraintStart_toStartOf="@+id/textView13"
-                app:layout_constraintTop_toBottomOf="@+id/textView13">
+                app:layout_constraintEnd_toEndOf="@+id/tvDispositivo_Reserva"
+                app:layout_constraintStart_toStartOf="@+id/tvDispositivo_Reserva"
+                app:layout_constraintTop_toBottomOf="@+id/tvDispositivo_Reserva">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="302dp"
