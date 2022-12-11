@@ -56,7 +56,17 @@ public class Drawer extends AppCompatActivity implements NavigationView.OnNaviga
 
         String mensaje_exito = getIntent().getStringExtra("exito");
         if (mensaje_exito != null && !mensaje_exito.equals("")) {
-            Snackbar.make(findViewById(R.id.id_drawer), mensaje_exito, Snackbar.LENGTH_LONG).show();
+            if (mensaje_exito.equals("El usuario TI se ha eliminado exitosamente")) {
+                Log.d("prueba", "ENTRO EN MENSAJE EXITO EQUALS");
+                Snackbar.make(findViewById(R.id.id_drawer), mensaje_exito, Snackbar.LENGTH_LONG).show();
+                getSupportActionBar().setTitle("Usuarios TI");
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container_fragment, new UsuariosTIFragment());
+                fragmentTransaction.commit();
+            } else {
+                Snackbar.make(findViewById(R.id.id_drawer), mensaje_exito, Snackbar.LENGTH_LONG).show();
+            }
         }
 
         drawerLayout = findViewById(R.id.drawer);

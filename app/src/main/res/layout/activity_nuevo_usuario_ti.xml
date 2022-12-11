@@ -63,4 +63,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_check" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/idProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/inputCorreo_registroUsuarioTI"
+        app:layout_constraintStart_toStartOf="@+id/inputCorreo_registroUsuarioTI"
+        app:layout_constraintTop_toBottomOf="@+id/inputCorreo_registroUsuarioTI" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

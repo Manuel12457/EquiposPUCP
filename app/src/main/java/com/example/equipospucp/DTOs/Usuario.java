@@ -8,6 +8,7 @@ public class Usuario implements Serializable {
     private String correo;
     private String rol;
     private String foto;
+    private boolean estado;
 
     public String getCodigo() {
         return codigo;
@@ -39,5 +40,13 @@ public class Usuario implements Serializable {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 }

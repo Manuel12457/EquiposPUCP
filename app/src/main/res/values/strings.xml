@@ -9,6 +9,12 @@
         <item>Docente</item>
         <item>Administrativo</item>
     </string-array>
+    <string-array name="rolesFiltro">
+        <item>Sin filtro</item>
+        <item>Alumno</item>
+        <item>Docente</item>
+        <item>Administrativo</item>
+    </string-array>
     <string-array name="tipos">
         <item>Laptop</item>
         <item>Monitor</item>

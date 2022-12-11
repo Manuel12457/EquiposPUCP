@@ -1,14 +1,313 @@
 package com.example.equipospucp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+
+import com.example.equipospucp.DTOs.Usuario;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class NuevoUsuarioTI extends AppCompatActivity {
+
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReferenceCorreos;
+    ValueEventListener valueEventListener;
+    ArrayList<String> listaCorreosRegistrados = new ArrayList<>();
+
+    FloatingActionButton fab;
+    CircularProgressIndicator circularProgressIndicator;
+
+    boolean codigoValido = true;
+    boolean correoValido = true;
+    int vecesCodigo = 0;
+    int vecesCorreo = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_usuario_ti);
+        getSupportActionBar().setTitle("Nuevo usuario TI");
+
+        fab = findViewById(R.id.fav_validarRegistroUsuarioTI);
+        circularProgressIndicator = findViewById(R.id.idProgress);
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReferenceCorreos = firebaseDatabase.getReference("usuarios");
+        valueEventListener = databaseReferenceCorreos.addValueEventListener(new NuevoUsuarioTI.listener());
+
+        TextInputLayout codigo = findViewById(R.id.inputCodigo_registroUsuarioTI);
+        codigo.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                boolean codigoEsEntero = true;
+                boolean longitudCodigo = codigo.getEditText().getText().toString().length() == 8;
+                try {
+                    int codigoInt = Integer.parseInt(codigo.getEditText().getText().toString());
+                } catch (NumberFormatException e) {
+                    codigoEsEntero = false;
+                    e.printStackTrace();
+                }
+
+                if (codigo.isErrorEnabled()) {
+                    if ((codigo.getEditText().getText().toString() != null && !codigo.getEditText().getText().toString().equals(""))) {
+                        if (!longitudCodigo) {
+                            codigo.setError("La longitud del código debe ser de 8 caracteres");
+                            codigoValido = false;
+                        } else if (!codigoEsEntero) {
+                            codigo.setError("El código debe contener únicamente números");
+                            codigoValido = false;
+                        } else {
+                            codigo.setErrorEnabled(false);
+                            codigoValido = true;
+                        }
+                    } else {
+                        codigo.setError("Ingrese un código");
+                        codigoValido = false;
+                    }
+                }
+
+                if (!codigo.isErrorEnabled() && vecesCodigo != 0) {
+                    if ((codigo.getEditText().getText().toString() != null && !codigo.getEditText().getText().toString().equals(""))) {
+                        if (!longitudCodigo) {
+                            codigo.setError("La longitud del código debe ser de 8 caracteres");
+                            codigoValido = false;
+                        } else if (!codigoEsEntero) {
+                            codigo.setError("El código debe contener únicamente números");
+                            codigoValido = false;
+                        } else {
+                            codigo.setErrorEnabled(false);
+                            codigoValido = true;
+                        }
+                    } else {
+                        codigo.setError("Ingrese un código");
+                        codigoValido = false;
+                    }
+                }
+            }
+        });
+
+        TextInputLayout correo = findViewById(R.id.inputCorreo_registroUsuarioTI);
+        correo.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (correo.isErrorEnabled()) {
+                    if ((correo.getEditText().getText().toString() != null && !correo.getEditText().getText().toString().equals(""))) {
+                        correo.setErrorEnabled(false);
+                        correoValido = true;
+                    } else {
+                        correo.setError("Ingrese un correo");
+                        correoValido = false;
+                    }
+                }
+
+                if (!correo.isErrorEnabled() && vecesCorreo != 0) {
+                    if ((correo.getEditText().getText().toString() != null && !correo.getEditText().getText().toString().equals(""))) {
+                        correo.setErrorEnabled(false);
+                        correoValido = true;
+                    } else {
+                        correo.setError("Ingrese un correo");
+                        correoValido = false;
+                    }
+                }
+            }
+        });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                validarRegistro(view);
+            }
+        });
+
     }
+
+    public void validarRegistro(View view) {
+
+        fab.setEnabled(false);
+        circularProgressIndicator.setVisibility(View.VISIBLE);
+
+        TextInputLayout codigo = findViewById(R.id.inputCodigo_registroUsuarioTI);
+        TextInputLayout correo = findViewById(R.id.inputCorreo_registroUsuarioTI);
+
+        boolean codigoEsEntero = true;
+        try {
+            int codigoInt = Integer.parseInt(codigo.getEditText().getText().toString());
+        } catch (NumberFormatException e) {
+            codigoEsEntero = false;
+            e.printStackTrace();
+        }
+        if (codigo.getEditText().getText().toString() == null || codigo.getEditText().getText().toString().equals("")) {
+            //Texto no ha sido ingresado en el edittext
+            vecesCodigo++;
+            codigo.setError("Ingrese un código");
+            codigoValido = false;
+        } else if (codigo.getEditText().getText().toString().length() != 8) {
+            vecesCodigo++;
+            codigo.setError("La longitud del código debe ser de 8 caracteres");
+            codigoValido = false;
+        } else if (!codigoEsEntero) {
+            vecesCodigo++;
+            codigo.setError("El código debe contener únicamente números");
+            codigoValido = false;
+        }
+
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z.]+";
+        boolean correoValido = true;
+        if (correo.getEditText().getText().toString() != null && !correo.getEditText().getText().toString().equals("")) {
+            //Texto ha sido ingresado en el edittext
+            if (!correo.getEditText().getText().toString().matches(emailPattern)) {
+                //Texto ingresado NO cumple con el patron de un correo electronico
+                vecesCorreo++;
+                correo.setError("Ingrese un correo válido");
+                correoValido = false;
+            } else {
+                //Validar si usuario existe en el sistema
+                if (!listaCorreosRegistrados.contains(correo.getEditText().getText().toString())) {
+                    vecesCorreo++;
+                    correo.setErrorEnabled(false);
+                } else {
+                    vecesCorreo++;
+                    correo.setError("El correo ingresado ya ha sido registrado");
+                    correoValido = false;
+                }
+            }
+        } else {
+            //Texto NO ha sido ingresado en el edittext
+            vecesCorreo++;
+            correo.setError("Ingrese un correo");
+            correoValido = false;
+        }
+
+        if (codigoValido && correoValido) {
+            Log.d("task", "Registro valido");
+
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(correo.getEditText().getText().toString(), "123456").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Log.d("task", "EXITO EN REGISTRO");
+
+                        //Guardar usuario en db
+                        DatabaseReference databaseReference = firebaseDatabase.getReference().child("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        Usuario usuario = new Usuario();
+                        usuario.setCodigo(codigo.getEditText().getText().toString());
+                        usuario.setRol("Usuario TI");
+                        usuario.setCorreo(correo.getEditText().getText().toString());
+                        usuario.setFoto("");
+                        usuario.setEstado(true);
+                        databaseReference.setValue(usuario)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Log.d("registro", "USUARIO GUARDADO");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("registro", "USUARIO NO GUARDADO - " + e.getMessage());
+                                        fab.setEnabled(true);
+                                        circularProgressIndicator.setVisibility(View.GONE);
+                                    }
+                                });
+
+                        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Log.d("task", "EXITO EN ENVIO DE CORREO DE VERIFICACION");
+                                Intent intent = new Intent(NuevoUsuarioTI.this, Drawer.class);
+                                intent.putExtra("exito", "Se ha enviado un correo para la verificación de su cuenta");
+                                startActivity(intent);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                fab.setEnabled(true);
+                                circularProgressIndicator.setVisibility(View.GONE);
+                                Log.d("task", "ERROR EN ENVIO DE CORREO DE VERIFICACION - " + e.getMessage());
+                            }
+                        });
+
+                    } else {
+                        Log.d("task", "ERROR EN REGISTRO - " + task.getException().getMessage());
+                        fab.setEnabled(true);
+                        circularProgressIndicator.setVisibility(View.GONE);
+                    }
+                }
+            });
+        } else {
+            fab.setEnabled(true);
+            circularProgressIndicator.setVisibility(View.GONE);
+        }
+    }
+
+    class listener implements ValueEventListener {
+
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                listaCorreosRegistrados.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Usuario usuario = ds.getValue(Usuario.class);
+                    listaCorreosRegistrados.add(usuario.getCorreo());
+                }
+            } else {
+                listaCorreosRegistrados.clear();
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+            Log.e("msg", "Error onCancelled", error.toException());
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        databaseReferenceCorreos.removeEventListener(valueEventListener);
+        super.onDestroy();
+    }
+
 }

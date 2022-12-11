@@ -361,6 +361,7 @@ public class RegistrarUsuario extends AppCompatActivity {
                         usuario.setRol(rol);
                         usuario.setCorreo(correo.getEditText().getText().toString());
                         usuario.setFoto("");
+                        usuario.setEstado(true);
                         databaseReference.setValue(usuario)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -396,9 +397,14 @@ public class RegistrarUsuario extends AppCompatActivity {
 
                     } else {
                         Log.d("task", "ERROR EN REGISTRO - " + task.getException().getMessage());
+                        btn.setEnabled(true);
+                        circularProgressIndicator.setVisibility(View.GONE);
                     }
                 }
             });
+        } else {
+            btn.setEnabled(true);
+            circularProgressIndicator.setVisibility(View.GONE);
         }
     }
 

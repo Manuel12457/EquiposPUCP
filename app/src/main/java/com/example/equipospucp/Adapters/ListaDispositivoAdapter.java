@@ -74,7 +74,7 @@ public class ListaDispositivoAdapter extends RecyclerView.Adapter<ListaDispositi
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 StorageReference imageRef;
                 for (DataSnapshot children : snapshot.getChildren()){
-                    Image image =children.getValue(Image.class);
+                    Image image = children.getValue(Image.class);
                     if (image.getDispositivo().equals(dispositivo.getId())){
                         //imageRef = storageReference.child("img/"+image.getImagen());
                         Log.d("ruta", "img/"+image.getImagen());

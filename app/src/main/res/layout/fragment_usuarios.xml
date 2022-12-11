@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:hint="Buscar por codigo"
+        app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -40,7 +41,7 @@
             android:layout_width="302dp"
             android:layout_height="50dp"
             android:inputType="none"
-            app:simpleItems="@array/roles" />
+            app:simpleItems="@array/rolesFiltro" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,9 +50,23 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_filtroRol" />
+
+    <TextView
+        android:id="@+id/noUsuarios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="No se han encontrado usuarios"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
