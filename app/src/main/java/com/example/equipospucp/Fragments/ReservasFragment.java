@@ -127,14 +127,11 @@ public class ReservasFragment extends Fragment {
     }
 
     class listener implements ValueEventListener {
-
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (snapshot.exists()) { //Nodo referente existe
                 listaReservas.clear();
-
                 //Si esUsuarioTI es true, deberan mostrarse todas las reservas, sino, solo las que posean la id del usuario cliente
-
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Reserva reserva = ds.getValue(Reserva.class);
                     ReservaDto reservaDto = new ReservaDto();
