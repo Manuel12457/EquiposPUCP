@@ -15,6 +15,11 @@
     <item
         android:id="@+id/reservations_item"
         android:checkable="true"
+        android:title="Solicitudes de préstamo"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/reservationsUser_item"
+        android:checkable="true"
         android:title="Reservas"
         app:showAsAction="ifRoom" />
     <item

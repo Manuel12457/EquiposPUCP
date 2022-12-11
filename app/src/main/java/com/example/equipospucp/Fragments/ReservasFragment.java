@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.equipospucp.Adapters.ListaReservasAdapter;
+import com.example.equipospucp.Adapters.ListaReservasUsuarioAdapter;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.Dispositivo;
 import com.example.equipospucp.DTOs.Reserva;
@@ -45,20 +46,26 @@ public class ReservasFragment extends Fragment {
     ValueEventListener valueEventListener;
 
     ArrayList<ReservaDto> listaReservas;
-    String seleccionFiltro;
+    String seleccionFiltro = "Todas las reservas";
 
     RecyclerView recyclerView;
     TextInputLayout spinnerReservas;
     TextView noreservas;
 
-    SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
     Date currentTime = Calendar.getInstance().getTime();
 
     Calendar menosundia = Calendar.getInstance();
     Calendar menosdosdias = Calendar.getInstance();
     Calendar menosunasemana = Calendar.getInstance();
     Calendar menosdossemanas = Calendar.getInstance();
-    Date fechahorareserva;
+
+    boolean todaslasconsultas = true;
+    boolean ultimas24h = false;
+    boolean ultimas48h = false;
+    boolean ultimasemana = false;
+    boolean ultimasdossemanas = false;
+    String fecha;
 
     Usuario usuario;
     boolean esUsuarioTI = false;
@@ -66,7 +73,7 @@ public class ReservasFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.reservas_fragment,container,false);
+        View view = inflater.inflate(R.layout.reservas_fragment, container, false);
 
         try {
             menosundia.setTime(sf.parse(sf.format(currentTime)));
@@ -87,9 +94,9 @@ public class ReservasFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView_reservas);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         listaReservas = new ArrayList<>();
+
         adapter = new ListaReservasAdapter(listaReservas, getContext());
         recyclerView.setAdapter(adapter);
-
         databaseReference = FirebaseDatabase.getInstance().getReference("reservas");
 
         FirebaseDatabase.getInstance().getReference("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -115,11 +122,47 @@ public class ReservasFragment extends Fragment {
 
         AutoCompleteTextView spinner = view.findViewById(R.id.idReserva);
         String[] arrayReservas = getResources().getStringArray(R.array.reservas);
-        spinner.setText(arrayReservas[0],false);
+        spinner.setText(arrayReservas[0], false);
         spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                seleccionFiltro = spinner.getText().toString();
+                fecha = spinner.getText().toString();
+                if (fecha.equals("Todas las reservas")) {
+                    todaslasconsultas = true;
+                    ultimas24h = false;
+                    ultimas48h = false;
+                    ultimasemana = false;
+                    ultimasdossemanas = false;
+                    valueEventListener = databaseReference.addValueEventListener(new ReservasFragment.listener());
+                } else if (fecha.equals("Hoy")) {
+                    todaslasconsultas = false;
+                    ultimas24h = true;
+                    ultimas48h = false;
+                    ultimasemana = false;
+                    ultimasdossemanas = false;
+                    valueEventListener = databaseReference.addValueEventListener(new ReservasFragment.listener());
+                } else if (fecha.equals("Ayer")) {
+                    todaslasconsultas = false;
+                    ultimas24h = false;
+                    ultimas48h = true;
+                    ultimasemana = false;
+                    ultimasdossemanas = false;
+                    valueEventListener = databaseReference.addValueEventListener(new ReservasFragment.listener());
+                } else if (fecha.equals("Hace 1 semana")) {
+                    todaslasconsultas = false;
+                    ultimas24h = false;
+                    ultimas48h = false;
+                    ultimasemana = true;
+                    ultimasdossemanas = false;
+                    valueEventListener = databaseReference.addValueEventListener(new ReservasFragment.listener());
+                } else if (fecha.equals("Hace 2 semanas")) {
+                    todaslasconsultas = false;
+                    ultimas24h = false;
+                    ultimas48h = false;
+                    ultimasemana = false;
+                    ultimasdossemanas = true;
+                    valueEventListener = databaseReference.addValueEventListener(new ReservasFragment.listener());
+                }
             }
         });
 
@@ -138,24 +181,68 @@ public class ReservasFragment extends Fragment {
                     reservaDto.setReserva(reserva);
                     reservaDto.setId(ds.getKey());
 
-                    //Verificar fecha y hora de emision de la solicitud segun seleccion del filtro
+                    //FECHA CONSULTA
+                    Calendar calConsulta = Calendar.getInstance();
                     try {
-                        fechahorareserva = sf.parse(reserva.getFechayhora());
+                        calConsulta.setTime(sf.parse(reserva.getFechayhora()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    //FECHA CONSULTA
+
+                    //FECHA FILTRO
+                    Date currentTime = Calendar.getInstance().getTime();
+                    Calendar calFiltro = Calendar.getInstance();
+                    try {
+                        calFiltro.setTime(sf.parse(sf.format(currentTime)));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
-                    if (seleccionFiltro.equals("Todas las reservas")) {
-                        listaReservas.add(reservaDto);
-                    } else if (seleccionFiltro.equals("Hoy") && fechahorareserva.after(menosundia.getTime())) {
-                        listaReservas.add(reservaDto);
-                    } else if (seleccionFiltro.equals("Ayer") && fechahorareserva.after(menosdosdias.getTime())) {
-                        listaReservas.add(reservaDto);
-                    } else if (seleccionFiltro.equals("Hace 1 semana") && fechahorareserva.after(menosunasemana.getTime())) {
-                        listaReservas.add(reservaDto);
-                    } else if (fechahorareserva.after(menosdossemanas.getTime())) { //"Hace 2 semanas"
-                        listaReservas.add(reservaDto);
+                    if (ultimas24h) {
+                        Log.d("filtro", "ULTIMAS 24H");
+                        calFiltro.add(Calendar.DATE, -1);
+                    } else if (ultimas48h) {
+                        Log.d("filtro", "ULTIMAS 48H");
+                        calFiltro.add(Calendar.DATE, -2);
+                    } else if (ultimasemana) {
+                        Log.d("filtro", "ULTIMO MES");
+                        calFiltro.add(Calendar.DATE, -7);
+                    } else if (ultimasdossemanas) {
+                        Log.d("filtro", "ULTIMO MES");
+                        calFiltro.add(Calendar.DATE, -14);
                     }
+                    //FECHA FILTRO
+
+                    if (todaslasconsultas) {
+                        listaReservas.add(reservaDto);
+                    } else {
+                        if (calConsulta.getTime().after(calFiltro.getTime())) {
+                            Log.d("filtro", "CUMPLE FILTRO");
+                            listaReservas.add(reservaDto);
+                        }
+                    }
+
+
+//                    Date fechahorareserva = new Date();
+//                    //Verificar fecha y hora de emision de la solicitud segun seleccion del filtro
+//                    try {
+//                        fechahorareserva = sf.parse(reserva.getFechayhora());
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    if (seleccionFiltro.equals("Todas las reservas")) {
+//                        listaReservas.add(reservaDto);
+//                    } else if (seleccionFiltro.equals("Hoy") && fechahorareserva.after(menosundia.getTime())) {
+//                        listaReservas.add(reservaDto);
+//                    } else if (seleccionFiltro.equals("Ayer") && fechahorareserva.after(menosdosdias.getTime())) {
+//                        listaReservas.add(reservaDto);
+//                    } else if (seleccionFiltro.equals("Hace 1 semana") && fechahorareserva.after(menosunasemana.getTime())) {
+//                        listaReservas.add(reservaDto);
+//                    } else if (fechahorareserva.after(menosdossemanas.getTime())) { //"Hace 2 semanas"
+//                        listaReservas.add(reservaDto);
+//                    }
                 }
 
                 if (listaReservas.isEmpty()) {

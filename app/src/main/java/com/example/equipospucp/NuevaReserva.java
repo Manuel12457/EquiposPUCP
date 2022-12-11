@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.Reserva;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -44,8 +46,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -100,6 +106,28 @@ public class NuevaReserva extends AppCompatActivity {
         inputDetalles = findViewById(R.id.inputDetallesAdicionales_Reserva);
 
         imgDNI = findViewById(R.id.imageViewDNI);
+
+        ImageButton add = findViewById(R.id.addButton);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int stockInt = Integer.parseInt(tvNumDias.getText().toString());
+                if (stockInt != 30) {
+                    tvNumDias.setText(String.valueOf(stockInt + 1));
+                }
+            }
+        });
+
+        ImageButton minus = findViewById(R.id.minButton);
+        minus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int stockInt = Integer.parseInt(tvNumDias.getText().toString());
+                if (stockInt != 1) {
+                    tvNumDias.setText(String.valueOf(stockInt - 1));
+                }
+            }
+        });
 
         // Se obtiene el clasificador para identificar la cara en la imagen
         if (OpenCVLoader.initDebug()){
@@ -197,13 +225,13 @@ public class NuevaReserva extends AppCompatActivity {
         }
     }
 
-    public void cambiarDias(View view){
-        Integer nuevoDia = Integer.parseInt(tvNumDias.getText().toString()) + (Integer) view.getTag();
-
-        if (nuevoDia>=1 || nuevoDia<=30){
-            tvNumDias.setText(nuevoDia.toString());
-        }
-    }
+//    public void cambiarDias(View view){
+//        Integer nuevoDia = Integer.parseInt(tvNumDias.getText().toString()) + (Integer) view.getTag();
+//
+//        if (nuevoDia>=1 || nuevoDia<=30){
+//            tvNumDias.setText(nuevoDia.toString());
+//        }
+//    }
 
     public void hacerReserva(View view){
         String motivo = inputMotivo.getEditText().getText().toString().trim();
@@ -217,14 +245,17 @@ public class NuevaReserva extends AppCompatActivity {
         Reserva reserva = new Reserva();
         reserva.setIdUsuario(auth.getCurrentUser().getUid());
         reserva.setIddispositivo(dispositivoDetalleDto.getId());
-        reserva.setFechayhora(LocalDateTime.now().toString());
+
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        reserva.setFechayhora(sf.format(currentTime));
+
         reserva.setMotivo(motivo);
         reserva.setCurso(curso);
         reserva.setTiempoReserva(Integer.parseInt(tiempoReserva));
         reserva.setProgramasInstalados(programas);
         reserva.setDetallesAdicionales(detalles);
         reserva.setEstado("PENDIENTE");
-
 
         Bitmap bitmapFoto = ((BitmapDrawable) imgDNI.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -241,7 +272,8 @@ public class NuevaReserva extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(NuevaReserva.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.activity_nueva_reserva), task.getException().getMessage() ,Snackbar.LENGTH_LONG).show();
+                    //Toast.makeText(NuevaReserva.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     Log.e("NuevaReserva", task.getException().getMessage());
                 }
             });

@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetallesReserva extends AppCompatActivity {
@@ -37,7 +38,7 @@ public class DetallesReserva extends AppCompatActivity {
     Usuario usuario;
     String idReserva;
     RecyclerView recyclerView;
-    List<ReservaDto> listaReserva;
+    List<ReservaDto> listaReserva = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

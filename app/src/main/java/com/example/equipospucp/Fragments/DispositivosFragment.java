@@ -59,8 +59,8 @@ public class DispositivosFragment extends Fragment {
                         System.out.println("ONDATACHANGE - AFUERA DEL IF");
                         if (snapshot.exists()) { //Nodo referente existe
                             usuario = snapshot.getValue(Usuario.class);
-                            if (!usuario.getRol().equals("Usuario TI")) {
-                                button.setVisibility(View.GONE);
+                            if (usuario.getRol().equals("Usuario TI")) {
+                                button.setVisibility(View.VISIBLE);
                             }
                         }
                     }

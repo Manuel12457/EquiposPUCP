@@ -30,7 +30,8 @@
             android:exported="false" />
         <activity
             android:name=".NuevaReserva"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".DetallesDispositivo"/>
         <activity
             android:name=".DetallesReserva"
             android:exported="false" />

@@ -48,6 +48,7 @@ public class DetallesDispositivo extends AppCompatActivity {
 
         FloatingActionButton editar = findViewById(R.id.editarDispositivo);
         FloatingActionButton eliminar = findViewById(R.id.eliminarDispositivo);
+        FloatingActionButton reservas = findViewById(R.id.reservar);
         FirebaseDatabase.getInstance().getReference("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -55,9 +56,14 @@ public class DetallesDispositivo extends AppCompatActivity {
                         System.out.println("ONDATACHANGE - AFUERA DEL IF");
                         if (snapshot.exists()) { //Nodo referente existe
                             usuario = snapshot.getValue(Usuario.class);
-                            if (!usuario.getRol().equals("Usuario TI")) {
+                            if (usuario.getRol().equals("Usuario TI")) {
+                                editar.setVisibility(View.VISIBLE);
+                                eliminar.setVisibility(View.VISIBLE);
+                                reservas.setVisibility(View.GONE);
+                            } else {
                                 editar.setVisibility(View.GONE);
                                 eliminar.setVisibility(View.GONE);
+                                reservas.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -143,6 +149,16 @@ public class DetallesDispositivo extends AppCompatActivity {
                 builder.show();
             }
         });
+
+        reservas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetallesDispositivo.this, NuevaReserva.class);
+                intent.putExtra("dispositivo", listaDispositivos.get(0));
+                startActivity(intent);
+            }
+        });
+
     }
 
     class listener implements ValueEventListener {

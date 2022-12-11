@@ -24,6 +24,7 @@ import com.example.equipospucp.Fragments.DispositivosFragment;
 import com.example.equipospucp.Fragments.EstadisticasFragment;
 import com.example.equipospucp.Fragments.ProfileFragment;
 import com.example.equipospucp.Fragments.ReservasFragment;
+import com.example.equipospucp.Fragments.ReservasUsuarioFragment;
 import com.example.equipospucp.Fragments.UsuariosFragment;
 import com.example.equipospucp.Fragments.UsuariosTIFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -109,7 +110,7 @@ public class Drawer extends AppCompatActivity implements NavigationView.OnNaviga
                                 nav_Menu.findItem(R.id.usuariosti_item).setVisible(false);
                                 nav_Menu.findItem(R.id.estadisticas_item).setVisible(false);
                                 nav_Menu.findItem(R.id.usuarios_item).setVisible(false);
-                                nav_Menu.findItem(R.id.reservations_item).setTitle("Solicitudes de préstamo");
+                                nav_Menu.findItem(R.id.reservationsUser_item).setVisible(false);
 
                                 navRolUsuario.setText(usuario.getRol());
                                 navCodigoUsuario.setText(usuario.getCodigo());
@@ -124,7 +125,7 @@ public class Drawer extends AppCompatActivity implements NavigationView.OnNaviga
                                 nav_Menu.findItem(R.id.usuariosti_item).setVisible(false);
                                 nav_Menu.findItem(R.id.estadisticas_item).setVisible(false);
                                 nav_Menu.findItem(R.id.usuarios_item).setVisible(false);
-                                nav_Menu.findItem(R.id.reservations_item).setTitle("Reservas");
+                                nav_Menu.findItem(R.id.reservations_item).setVisible(false);
 
                                 navRolUsuario.setText(usuario.getRol());
                                 navCodigoUsuario.setText(usuario.getCodigo());
@@ -167,6 +168,12 @@ public class Drawer extends AppCompatActivity implements NavigationView.OnNaviga
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_fragment, new ReservasFragment());
+            fragmentTransaction.commit();
+        } else if (item.getItemId() == R.id.reservationsUser_item) {
+            getSupportActionBar().setTitle("Reservas");
+            fragmentManager = getSupportFragmentManager();
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_fragment, new ReservasUsuarioFragment());
             fragmentTransaction.commit();
         } else if (item.getItemId() == R.id.usuariosti_item) {
             getSupportActionBar().setTitle("Usuarios TI");
