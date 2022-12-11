@@ -49,6 +49,7 @@
                 android:visibility="visible"
                 app:counterEnabled="true"
                 app:counterMaxLength="500"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="@+id/tvDispositivo_Reserva"
                 app:layout_constraintStart_toStartOf="@+id/tvDispositivo_Reserva"
                 app:layout_constraintTop_toBottomOf="@+id/tvDispositivo_Reserva">
@@ -66,6 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Curso"
+                app:errorEnabled="true"
                 app:layout_constraintEnd_toEndOf="@+id/inputMotivo_Reserva"
                 app:layout_constraintStart_toStartOf="@+id/inputMotivo_Reserva"
                 app:layout_constraintTop_toBottomOf="@+id/inputMotivo_Reserva">
@@ -92,6 +94,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
+                    android:tag="-1"
+                    android:onClick="cambiarDias"
                     app:srcCompat="@drawable/ic_minus" />
 
                 <TextView
@@ -112,6 +116,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
+                    android:tag="1"
+                    android:onClick="cambiarDias"
                     app:srcCompat="@drawable/ic_add" />
 
             </LinearLayout>
@@ -161,6 +167,27 @@
                 app:srcCompat="@drawable/ic_edit" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputProgramas_Reserva"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Programas a instalar"
+                android:visibility="visible"
+                app:counterEnabled="true"
+                app:counterMaxLength="500"
+                app:errorEnabled="true"
+                app:layout_constraintEnd_toEndOf="@+id/imageViewDNI"
+                app:layout_constraintStart_toStartOf="@+id/imageViewDNI"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewDNI">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="302dp"
+                    android:layout_height="200dp"
+                    android:gravity="start|top"
+                    android:inputType="textLongMessage|textMultiLine|text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputDetallesAdicionales_Reserva"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -183,27 +210,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputProgramas_Reserva"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Programas a instalar"
-                android:visibility="visible"
-                app:counterEnabled="true"
-                app:counterMaxLength="500"
-                app:layout_constraintEnd_toEndOf="@+id/imageViewDNI"
-                app:layout_constraintStart_toStartOf="@+id/imageViewDNI"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewDNI">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="302dp"
-                    android:layout_height="200dp"
-                    android:gravity="start|top"
-                    android:inputType="textLongMessage|textMultiLine|text" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
@@ -213,7 +219,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:clickable="true"
+        android:onClick="hacerReserva"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_check" />

@@ -7,14 +7,26 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.equipospucp.DTOs.DispositivoDetalleDto;
+import com.example.equipospucp.DTOs.Reserva;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
@@ -26,16 +38,26 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class NuevaReserva extends AppCompatActivity {
 
+    FirebaseAuth auth;
+    DatabaseReference ref;
+    StorageReference imgRef;
+
     private TextView tvNombreAlumno, tvNombreDispositivo, tvNumDias;
     private TextInputLayout inputMotivo, inputCurso, inputProgramas, inputDetalles;
+    private FloatingActionButton fab;
     private ImageView imgDNI;
     private Bitmap bitmap;
     private Boolean conFoto = false;
@@ -48,10 +70,19 @@ public class NuevaReserva extends AppCompatActivity {
     Mat mat;
     MatOfRect rects;
 
+    DispositivoDetalleDto dispositivoDetalleDto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_reserva);
+
+        // Se mapean los elementos de firebase
+        auth = FirebaseAuth.getInstance();
+        ref = FirebaseDatabase.getInstance().getReference("reservas");
+        imgRef = FirebaseStorage.getInstance().getReference("/img");
+
+        dispositivoDetalleDto = (DispositivoDetalleDto) getIntent().getSerializableExtra("dispositivo");
 
         // Se piden los permisos para la cámara
         if (checkSelfPermission(Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
@@ -115,9 +146,6 @@ public class NuevaReserva extends AppCompatActivity {
                     dialogInterface.dismiss();
 
                 })).show();
-
-
-
     }
 
     @Override
@@ -167,5 +195,90 @@ public class NuevaReserva extends AppCompatActivity {
             imgDNI.setScaleType(ImageView.ScaleType.CENTER_CROP);
             conFoto = true;
         }
+    }
+
+    public void cambiarDias(View view){
+        Integer nuevoDia = Integer.parseInt(tvNumDias.getText().toString()) + (Integer) view.getTag();
+
+        if (nuevoDia>=1 || nuevoDia<=30){
+            tvNumDias.setText(nuevoDia.toString());
+        }
+    }
+
+    public void hacerReserva(View view){
+        String motivo = inputMotivo.getEditText().getText().toString().trim();
+        String curso = inputCurso.getEditText().getText().toString().trim();
+        String tiempoReserva = tvNumDias.getText().toString().trim();
+        String programas = inputProgramas.getEditText().getText().toString().trim();
+        String detalles = inputDetalles.getEditText().getText().toString().trim();
+
+        if(!camposValidos(motivo,curso,tiempoReserva,programas,detalles)) return;
+
+        Reserva reserva = new Reserva();
+        reserva.setIdUsuario(auth.getCurrentUser().getUid());
+        reserva.setIddispositivo(dispositivoDetalleDto.getId());
+        reserva.setFechayhora(LocalDateTime.now().toString());
+        reserva.setMotivo(motivo);
+        reserva.setCurso(curso);
+        reserva.setTiempoReserva(Integer.parseInt(tiempoReserva));
+        reserva.setProgramasInstalados(programas);
+        reserva.setDetallesAdicionales(detalles);
+        reserva.setEstado("PENDIENTE");
+
+
+        Bitmap bitmapFoto = ((BitmapDrawable) imgDNI.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmapFoto.compress(Bitmap.CompressFormat.WEBP,50,baos);
+
+        String nombre = UUID.randomUUID().toString()+".webp";
+        reserva.setDni(nombre);
+
+        imgRef.child(nombre).putBytes(baos.toByteArray()).addOnSuccessListener(taskSnapshot -> {
+            ref.push().setValue(reserva).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Intent intent = new Intent(NuevaReserva.this, Drawer.class);
+                    intent.putExtra("exito", "La reserva se ha realizado con éxito");
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(NuevaReserva.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("NuevaReserva", task.getException().getMessage());
+                }
+            });
+        });
+    }
+
+    public boolean camposValidos(String motivo, String curso, String tiempoReserva, String programas, String detalles){
+        boolean valido = true;
+
+        // Se limpian los errores previos
+        inputMotivo.setError(null);
+        inputCurso.setError(null);
+        inputProgramas.setError(null);
+        inputDetalles.setError(null);
+
+        // Si hay un error lo notifica al usuario
+        if (motivo.equals("")){
+            inputMotivo.setError("El motivo no puede estar vacío");
+            valido = false;
+        }
+        if (curso.equals("")){
+            inputCurso.setError("El curso no puede estar vacío");
+            valido = false;
+        }
+        if (programas.equals("")){
+            inputProgramas.setError("Debe especificar una lista de programas");
+            valido = false;
+        }
+        if (detalles.equals("")){
+            inputMotivo.setError("Deben especificarse detalles adcionales del ispositivvo");
+            valido = false;
+        }
+        if (!conFoto){
+            Toast.makeText(NuevaReserva.this, "Debe ingresar una foto para continuar con la reservas", Toast.LENGTH_SHORT).show();
+            valido = false;
+        }
+
+        return valido;
     }
 }
