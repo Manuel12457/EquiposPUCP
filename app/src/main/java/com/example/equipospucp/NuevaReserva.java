@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -33,20 +32,16 @@ import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class NuevaReserva extends AppCompatActivity {
@@ -95,7 +90,7 @@ public class NuevaReserva extends AppCompatActivity {
         tvNumDias = findViewById(R.id.tvDias_Reserva);
 
         inputMotivo = findViewById(R.id.inputMotivo_Reserva);
-        inputCurso = findViewById(R.id.inputCurso_Reserva);
+        inputCurso = findViewById(R.id.inputDireccionReserva);
         inputProgramas = findViewById(R.id.inputProgramas_Reserva);
         inputDetalles = findViewById(R.id.inputDetallesAdicionales_Reserva);
 

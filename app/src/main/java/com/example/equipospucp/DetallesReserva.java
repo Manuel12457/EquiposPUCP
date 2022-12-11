@@ -148,7 +148,17 @@ public class DetallesReserva extends AppCompatActivity {
                                     builder.show();
                                 });
                                 aceptarReserva.setOnClickListener(view -> {
-                                    //Aceptamos la reserva
+                                    new MaterialAlertDialogBuilder(view.getContext())
+                                            .setTitle("Aceptar Reserva")
+                                            .setMessage("¿Estas seguro de querer aceptar esta solicitud de reserva?")
+                                            .setNegativeButton("Cancelar",((dialogInterface, i) -> {
+                                                dialogInterface.cancel();
+                                            })).setPositiveButton("Aceptar", ((dialogInterface, i) -> {
+                                                startActivity(new Intent(DetallesReserva.this, ElegirUbicacionReserva.class)
+                                                        .putExtra("idReserva",idReserva));
+                                                dialogInterface.dismiss();
+                                                finish();
+                                            })).show();
                                 });
                             }
                         }
