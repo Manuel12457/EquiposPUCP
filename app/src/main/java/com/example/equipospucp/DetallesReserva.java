@@ -63,7 +63,7 @@ public class DetallesReserva extends AppCompatActivity {
                                 rechazarReserva.setOnClickListener(view -> {
                                     //Cancelamos la reserva
                                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(DetallesReserva.this);
-                                    builder.setMessage("¿Seguro que desea cancelar esta reserva");
+                                    builder.setMessage("¿Seguro que desea cancelar esta reserva?");
                                     builder.setPositiveButton("Aceptar",
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
@@ -108,6 +108,44 @@ public class DetallesReserva extends AppCompatActivity {
                             }else{
                                 rechazarReserva.setOnClickListener(view -> {
                                     //Denegamos la reserva
+                                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(DetallesReserva.this);
+                                    builder.setMessage("¿Seguro que desea rechazar la solicitud?");
+                                    builder.setPositiveButton("Aceptar",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    //Logica de aceptar
+                                                    LocalDateTime now = LocalDateTime.now();
+                                                    databaseReference.child(idReserva).addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                            Reserva reserva = snapshot.getValue(Reserva.class);
+                                                            LocalDateTime reservaTime = LocalDateTime.parse(reserva.getFechayhora());
+                                                            if(reservaTime.compareTo(now) > 0){
+                                                                databaseReference.child(idReserva).child("estado").setValue("CANCELADO");
+                                                                Toast.makeText(DetallesReserva.this,"Reserva denegada",Toast.LENGTH_SHORT).show();
+                                                            }else{
+                                                                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(DetallesReserva.this);
+                                                                builder.setMessage("Su reserva ha expirado. No puede ser cancelada");
+                                                                builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                                        getDetalles();
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {}
+                                                    });
+                                                }
+                                            });
+                                    builder.setNegativeButton("Cancelar",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.cancel();
+                                                }
+                                            });
+                                    builder.show();
                                 });
                                 aceptarReserva.setOnClickListener(view -> {
                                     //Aceptamos la reserva
