@@ -91,26 +91,6 @@ public class InicioSesion extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (firebaseAuth.getCurrentUser().isEmailVerified()) {
-
-//                                    String url = "https://equipospucp-8e679-default-rtdb.firebaseio.com/usuarios/" + firebaseAuth.getCurrentUser().getUid() + "/.json";
-//
-//                                    RequestQueue queue = Volley.newRequestQueue(InicioSesion.this);
-//
-//                                    StringRequest stringRequest = new StringRequest(
-//                                            Request.Method.GET,
-//                                            url,
-//                                            response -> {
-//                                                Log.d("data", response);
-//                                                Gson gson = new Gson();
-//                                                UsuarioDto usuarioDto = gson.fromJson(response, UsuarioDto.class);
-//                                                TextView textView = findViewById(R.id.infoUsuario);
-//                                                textView.setText("Correo: " + usuarioDto.getCorreo() + "\n"
-//                                                        + "Codigo: " + usuarioDto.getCodigo() + "\n"
-//                                                + "Rol: " + usuarioDto.getRol());
-//                                            },
-//                                            error -> Log.e("data", error.getMessage()));
-//                                    queue.add(stringRequest);
-
                                     Intent intent = new Intent(InicioSesion.this, Drawer.class);
                                     startActivity(intent);
                                     finish();

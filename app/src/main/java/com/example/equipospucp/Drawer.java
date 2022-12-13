@@ -56,18 +56,9 @@ public class Drawer extends AppCompatActivity implements NavigationView.OnNaviga
         getSupportActionBar().setTitle("");
 
         String mensaje_exito = getIntent().getStringExtra("exito");
+        String accion = getIntent().getStringExtra("accion");
         if (mensaje_exito != null && !mensaje_exito.equals("")) {
-            if (mensaje_exito.equals("El usuario TI se ha eliminado exitosamente")) {
-                Log.d("prueba", "ENTRO EN MENSAJE EXITO EQUALS");
-                Snackbar.make(findViewById(R.id.id_drawer), mensaje_exito, Snackbar.LENGTH_LONG).show();
-                getSupportActionBar().setTitle("Usuarios TI");
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container_fragment, new UsuariosTIFragment());
-                fragmentTransaction.commit();
-            } else {
-                Snackbar.make(findViewById(R.id.id_drawer), mensaje_exito, Snackbar.LENGTH_LONG).show();
-            }
+            Snackbar.make(findViewById(R.id.id_drawer), mensaje_exito, Snackbar.LENGTH_LONG).show();
         }
 
         drawerLayout = findViewById(R.id.drawer);
@@ -96,16 +87,28 @@ public class Drawer extends AppCompatActivity implements NavigationView.OnNaviga
                             if (usuario.getRol().equals("Admin")) {
                                 nav_Menu.findItem(R.id.devices_item).setVisible(false);
                                 nav_Menu.findItem(R.id.reservations_item).setVisible(false);
+                                nav_Menu.findItem(R.id.reservationsUser_item).setVisible(false);
 
                                 navRolUsuario.setText("");
                                 navCodigoUsuario.setText("Administrador");
                                 //COLOCAR AQUI LA IMAGEN
 
-                                getSupportActionBar().setTitle("Perfil");
-                                fragmentManager = getSupportFragmentManager();
-                                fragmentTransaction = fragmentManager.beginTransaction();
-                                fragmentTransaction.replace(R.id.container_fragment, new ProfileFragment());
-                                fragmentTransaction.commit();
+                                if (accion != null && !accion.equals("")) {
+                                    if (accion.equals("Lista usuarios TI")) {
+                                        getSupportActionBar().setTitle("Usuarios TI");
+                                        fragmentManager = getSupportFragmentManager();
+                                        fragmentTransaction = fragmentManager.beginTransaction();
+                                        fragmentTransaction.replace(R.id.container_fragment, new UsuariosTIFragment());
+                                        fragmentTransaction.commit();
+                                    }
+                                } else {
+                                    getSupportActionBar().setTitle("Perfil");
+                                    fragmentManager = getSupportFragmentManager();
+                                    fragmentTransaction = fragmentManager.beginTransaction();
+                                    fragmentTransaction.replace(R.id.container_fragment, new ProfileFragment());
+                                    fragmentTransaction.commit();
+                                }
+
                             } else if (usuario.getRol().equals("Usuario TI")) {
                                 nav_Menu.findItem(R.id.usuariosti_item).setVisible(false);
                                 nav_Menu.findItem(R.id.estadisticas_item).setVisible(false);

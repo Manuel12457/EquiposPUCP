@@ -3,6 +3,7 @@ package com.example.equipospucp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,8 +17,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +42,9 @@ public class NuevoUsuarioTI extends AppCompatActivity {
     FloatingActionButton fab;
     CircularProgressIndicator circularProgressIndicator;
 
+    String correoAdmin;
+    String passwordAdmin;
+
     boolean codigoValido = true;
     boolean correoValido = true;
     int vecesCodigo = 0;
@@ -50,8 +56,10 @@ public class NuevoUsuarioTI extends AppCompatActivity {
         setContentView(R.layout.activity_nuevo_usuario_ti);
         getSupportActionBar().setTitle("Nuevo usuario TI");
 
+        correoAdmin = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        passwordAdmin = "123456";
+
         fab = findViewById(R.id.fav_validarRegistroUsuarioTI);
-        circularProgressIndicator = findViewById(R.id.idProgress);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReferenceCorreos = firebaseDatabase.getReference("usuarios");
@@ -165,9 +173,6 @@ public class NuevoUsuarioTI extends AppCompatActivity {
 
     public void validarRegistro(View view) {
 
-        fab.setEnabled(false);
-        circularProgressIndicator.setVisibility(View.VISIBLE);
-
         TextInputLayout codigo = findViewById(R.id.inputCodigo_registroUsuarioTI);
         TextInputLayout correo = findViewById(R.id.inputCorreo_registroUsuarioTI);
 
@@ -248,38 +253,44 @@ public class NuevoUsuarioTI extends AppCompatActivity {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.d("registro", "USUARIO NO GUARDADO - " + e.getMessage());
-                                        fab.setEnabled(true);
-                                        circularProgressIndicator.setVisibility(View.GONE);
                                     }
                                 });
 
                         FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                Log.d("task", "EXITO EN ENVIO DE CORREO DE VERIFICACION");
-                                Intent intent = new Intent(NuevoUsuarioTI.this, Drawer.class);
-                                intent.putExtra("exito", "Se ha enviado un correo para la verificación de su cuenta");
-                                startActivity(intent);
+
+                                FirebaseAuth.getInstance().signOut();
+                                FirebaseAuth.getInstance().signInWithEmailAndPassword(correoAdmin, passwordAdmin).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d("task", "EXITO EN REGISTRO");
+                                            Log.d("task", "EXITO EN ENVIO DE CORREO DE VERIFICACION");
+                                            Intent intent = new Intent(NuevoUsuarioTI.this, Drawer.class);
+                                            intent.putExtra("exito", "Se ha enviado un correo para la verificación de la cuenta del nuevo usuario TI");
+                                            intent.putExtra("accion", "Lista usuarios TI");
+                                            startActivity(intent);
+                                        } else {
+                                            Log.d("task", "ERROR EN REGISTRO - " + task.getException().getMessage());
+                                            //Ver bien mensaje de error
+                                            Snackbar.make(findViewById(R.id.activity_iniciar_sesion), task.getException().getMessage(), Snackbar.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                fab.setEnabled(true);
-                                circularProgressIndicator.setVisibility(View.GONE);
                                 Log.d("task", "ERROR EN ENVIO DE CORREO DE VERIFICACION - " + e.getMessage());
                             }
                         });
 
                     } else {
                         Log.d("task", "ERROR EN REGISTRO - " + task.getException().getMessage());
-                        fab.setEnabled(true);
-                        circularProgressIndicator.setVisibility(View.GONE);
                     }
                 }
             });
-        } else {
-            fab.setEnabled(true);
-            circularProgressIndicator.setVisibility(View.GONE);
         }
     }
 
@@ -302,6 +313,28 @@ public class NuevoUsuarioTI extends AppCompatActivity {
         public void onCancelled(@NonNull DatabaseError error) {
             Log.e("msg", "Error onCancelled", error.toException());
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NuevoUsuarioTI.this);
+        builder.setMessage("¿Volver a la pantalla anterior? No se creará el usuario TI");
+
+        builder.setPositiveButton("Aceptar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(NuevoUsuarioTI.this,Drawer.class);
+                        intent.putExtra("accion", "Lista usuarios TI");
+                        startActivity(intent);
+                    }
+                });
+        builder.setNegativeButton("Cancelar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
     }
 
     @Override

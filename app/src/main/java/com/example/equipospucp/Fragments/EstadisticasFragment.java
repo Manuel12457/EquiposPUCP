@@ -77,63 +77,72 @@ public class EstadisticasFragment extends Fragment {
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (snapshot.exists()) { //Nodo referente existe
                 listaCantidadPrestamosPorMarca.clear();
+                marcaYCantidad.clear();
+                marcaDispositivoYCantidad.clear();
 
                 int cantidadEquiposPrestados = 0;
 
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     Reserva reserva = ds.getValue(Reserva.class);
-                    cantidadEquiposPrestados++;
+                    if (reserva.getEstado().equals("PENDIENTE") || reserva.getEstado().equals("APROBADO")) {
+                        cantidadEquiposPrestados++;
+                        FirebaseDatabase.getInstance().getReference("dispositivos").child(reserva.getIddispositivo())
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.exists()) {
+                                            Dispositivo dispositivo = snapshot.getValue(Dispositivo.class);
+                                            String marca = dispositivo.getMarca();
+                                            String tipo = dispositivo.getTipo();
 
-                    FirebaseDatabase.getInstance().getReference("dispositivos").child(reserva.getIddispositivo())
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()) {
-                                        Dispositivo dispositivo = snapshot.getValue(Dispositivo.class);
-                                        String marca = dispositivo.getMarca();
-                                        String tipo = dispositivo.getTipo();
+                                            if (marcaYCantidad.isEmpty()) {
+                                                marcaYCantidad.put(marca,1);
+                                                marcaDispositivoYCantidad.put(tipo+" "+marca,1);
+                                            } else {
+                                                for (Map.Entry<String, Integer> entry : marcaYCantidad.entrySet()) {
+                                                    if (entry.getKey().equals(marca)) {
+                                                        marcaYCantidad.put(entry.getKey(), entry.getValue()+1);
+                                                    } else {
+                                                        marcaYCantidad.put(marca, entry.getValue()+1);
+                                                    }
+                                                }
+                                                for (Map.Entry<String, Integer> entry : marcaDispositivoYCantidad.entrySet()) {
+                                                    if (entry.getKey().equals(tipo+" "+marca)) {
+                                                        marcaDispositivoYCantidad.put(entry.getKey(), entry.getValue()+1);
+                                                    } else {
+                                                        marcaDispositivoYCantidad.put(tipo+" "+marca, entry.getValue()+1);
+                                                    }
+                                                }
+                                            }
 
-                                        if (marcaYCantidad.isEmpty()) {
-                                            marcaYCantidad.put(marca,1);
-                                            marcaDispositivoYCantidad.put(tipo+" "+marca,1);
-                                        } else {
+                                            listaCantidadPrestamosPorMarca.clear();
                                             for (Map.Entry<String, Integer> entry : marcaYCantidad.entrySet()) {
-                                                if (entry.getKey().equals(marca)) {
-                                                    marcaYCantidad.put(marca, entry.getValue()+1);
-                                                }
+                                                listaCantidadPrestamosPorMarca.add(entry.getKey()+"\n"+entry.getValue());
                                             }
+
+                                            String equipoMasPrestadoStr = "";
+                                            Integer cantidadEquipoMasPrestado = 0;
                                             for (Map.Entry<String, Integer> entry : marcaDispositivoYCantidad.entrySet()) {
-                                                if (entry.getKey().equals(tipo+" "+marca)) {
-                                                    marcaDispositivoYCantidad.put(tipo+" "+marca, entry.getValue()+1);
+                                                if (entry.getValue() > cantidadEquipoMasPrestado) {
+                                                    equipoMasPrestadoStr = entry.getKey();
+                                                    cantidadEquipoMasPrestado = entry.getValue();
                                                 }
                                             }
-                                        }
 
-                                        for (Map.Entry<String, Integer> entry : marcaYCantidad.entrySet()) {
-                                            listaCantidadPrestamosPorMarca.add(entry.getKey()+"\n"+entry.getValue());
+                                            equipoMasPrestado.setText(equipoMasPrestadoStr);
+                                            adapter.notifyDataSetChanged();
                                         }
-
-                                        String equipoMasPrestadoStr = "";
-                                        Integer cantidadEquipoMasPrestado = 0;
-                                        for (Map.Entry<String, Integer> entry : marcaDispositivoYCantidad.entrySet()) {
-                                            if (entry.getValue() > cantidadEquipoMasPrestado) {
-                                                equipoMasPrestadoStr = entry.getKey();
-                                                cantidadEquipoMasPrestado = entry.getValue();
-                                            }
-                                        }
-
-                                        equipoMasPrestado.setText(equipoMasPrestadoStr);
-                                        adapter.notifyDataSetChanged();
                                     }
-                                }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
 
-                                }
-                            });
+                                    }
+                                });
+                    }
+
                 }
-                cantidadTotalEquiposPrestados.setText(cantidadEquiposPrestados);
+                cantidadTotalEquiposPrestados.setText(String.valueOf(cantidadEquiposPrestados));
                 adapter.notifyDataSetChanged();
             } else {
                 listaCantidadPrestamosPorMarca.clear();

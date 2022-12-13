@@ -32,7 +32,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile_fragment,container,false);
 
-        editarFoto = view.findViewById(R.id.imageButtonEditarFoto);
         firebaseAuth = firebaseAuth.getInstance();
         String id = firebaseAuth.getCurrentUser().getUid();
         System.out.println(id);
@@ -52,10 +51,6 @@ public class ProfileFragment extends Fragment {
 
                             codigo.setText(usuario.getCodigo());
                             rol.setText(usuario.getRol());
-
-                            if (usuario.getRol().equals("Admin")) {
-                                editarFoto.setVisibility(View.GONE);
-                            }
 
                             correo.setText("Correo con el cual se ha registrado\n" + usuario.getCorreo());
                         }

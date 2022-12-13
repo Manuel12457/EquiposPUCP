@@ -95,6 +95,7 @@ public class DetalleUsuario extends AppCompatActivity {
                                             public void onSuccess(Void unused) {
                                                 Intent intent = new Intent(DetalleUsuario.this,Drawer.class);
                                                 intent.putExtra("exito", "El usuario TI se ha eliminado exitosamente");
+                                                intent.putExtra("accion", "Lista usuarios TI");
                                                 startActivity(intent);
                                             }
                                         })
