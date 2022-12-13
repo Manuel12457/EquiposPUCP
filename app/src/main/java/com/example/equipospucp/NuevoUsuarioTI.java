@@ -11,7 +11,14 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.equipospucp.DTOs.Usuario;
 import com.example.equipospucp.config.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +37,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -269,11 +279,28 @@ public class NuevoUsuarioTI extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             Log.d("task", "EXITO EN REGISTRO");
                                             Log.d("task", "EXITO EN ENVIO DE CORREO DE VERIFICACION");
-                                            helper.setContext(NuevoUsuarioTI.this);
-                                            helper.setTo(correo.getEditText().getText().toString());
-                                            helper.setSubject("Bienvenido a la plataforma de equipos PUCP");
-                                            helper.setBody("Usted ha sido registrado con las siguientes credenciales\n"+"correo: "+correo.getEditText().getText().toString()+"\n"+"contraseña: 123456\n"+"Por favor ingrese a su carpeta span y valide su cuenta!");
-                                            helper.sendEmail();
+                                            RequestQueue queue = Volley.newRequestQueue(NuevoUsuarioTI.this);
+                                            String url = "http://ec2-52-207-211-253.compute-1.amazonaws.com/api/enviarCorreo";
+                                            JSONObject jsonObject = new JSONObject();
+                                            try {
+                                                jsonObject.put("to",correo.getEditText().getText().toString());
+                                                jsonObject.put("subject","Bienvenido a la plataforma de equipos PUCP");
+                                                jsonObject.put("body","Usted ha sido registrado con las siguientes credenciales\n"+"correo: "+correo.getEditText().getText().toString()+"\n"+"contraseña: 123456\n"+"Por favor ingrese a su carpeta span y valide su cuenta!");
+                                            }catch (JSONException e){
+                                                System.out.println(e);
+                                            }
+                                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, jsonObject, new Response.Listener<JSONObject>() {
+                                                @Override
+                                                public void onResponse(JSONObject response) {
+                                                    Toast.makeText(NuevoUsuarioTI.this,"Peticion exitosa",Toast.LENGTH_SHORT).show();
+                                                }
+                                            }, new Response.ErrorListener() {
+                                                @Override
+                                                public void onErrorResponse(VolleyError error) {
+                                                    Toast.makeText(NuevoUsuarioTI.this,"Peticion fallida",Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                            queue.add(jsonObjectRequest);
                                             Intent intent = new Intent(NuevoUsuarioTI.this, Drawer.class);
                                             intent.putExtra("exito", "Se ha enviado un correo para la verificación de la cuenta del nuevo usuario TI");
                                             intent.putExtra("accion", "Lista usuarios TI");
