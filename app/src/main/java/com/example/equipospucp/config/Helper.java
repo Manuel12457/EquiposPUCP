@@ -60,7 +60,7 @@ public class Helper {
 
     public void sendEmail(){
         RequestQueue queue = Volley.newRequestQueue(this.context);
-        String url = "http://ec2-52-207-211-253.compute-1.amazonaws.com:9000/api/enviarCorreo";
+        String url = "http://ec2-52-207-211-253.compute-1.amazonaws.com/api/enviarCorreo";
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("to",this.to);
