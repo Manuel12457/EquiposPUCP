@@ -38,7 +38,6 @@ public class CambioContrasenia extends AppCompatActivity {
     ArrayList<String> listaCorreosRegistrados = new ArrayList<>();
 
     Button btn;
-    CircularProgressIndicator circularProgressIndicator;
 
     boolean correoValido = true;
     int vecesCorreo = 0;
@@ -51,7 +50,6 @@ public class CambioContrasenia extends AppCompatActivity {
         getSupportActionBar().setTitle("Cambio de contraseña");
 
         btn = findViewById(R.id.btn_enviarCorreo);
-        circularProgressIndicator = findViewById(R.id.idProgress);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReferenceCorreos = firebaseDatabase.getReference("usuarios");
@@ -108,8 +106,6 @@ public class CambioContrasenia extends AppCompatActivity {
 
     public void validarCorreo(View view) {
 
-        btn.setEnabled(false);
-        circularProgressIndicator.setVisibility(View.VISIBLE);
         TextInputLayout correo = findViewById(R.id.inputCorreo_cambioPsw);
 
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z.]+";
@@ -169,8 +165,6 @@ public class CambioContrasenia extends AppCompatActivity {
                             }
                         });
                     } else {
-                        btn.setEnabled(true);
-                        circularProgressIndicator.setVisibility(View.GONE);
                         Snackbar.make(findViewById(R.id.activity_cambiar_contrasenia), "Su cuenta no ha sido verificada. Verifíquela para poder ingresar", Snackbar.LENGTH_LONG).show();
                     }
                 }

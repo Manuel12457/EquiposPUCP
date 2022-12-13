@@ -73,7 +73,7 @@ public class DispositivoDetalleAdapter extends RecyclerView.Adapter<DispositivoD
         DispositivoDetalleDto dispositivo = getListaDispositivos().get(position);
         //Cambiarlo por imagen en firebase db. Colocar imagen por defecto si no posee
 
-        holder.textViewdetalles.setText("Tipo: "+ dispositivo.getDispositivoDto().getTipo() +"\nMarca: " + dispositivo.getDispositivoDto().getMarca() + "\nStock: " + dispositivo.getDispositivoDto().getStock() + "\nEquipos reservados: ");
+        holder.textViewdetalles.setText("Tipo: "+ dispositivo.getDispositivoDto().getTipo() +"\nMarca: " + dispositivo.getDispositivoDto().getMarca() + "\nStock: " + dispositivo.getDispositivoDto().getStock());
 
         String caracteristicasenview = "";
         String caracteristicas = dispositivo.getDispositivoDto().getCaracteristicas();

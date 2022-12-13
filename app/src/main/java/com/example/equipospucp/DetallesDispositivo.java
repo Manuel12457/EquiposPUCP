@@ -109,7 +109,6 @@ public class DetallesDispositivo extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("dispositivos");
                                 Dispositivo dispositivo = new Dispositivo();
 
                                 dispositivo.setTipo(listaDispositivos.get(0).getDispositivoDto().getTipo());
@@ -120,7 +119,8 @@ public class DetallesDispositivo extends AppCompatActivity {
                                 dispositivo.setStock(listaDispositivos.get(0).getDispositivoDto().getStock());
                                 dispositivo.setVisible(false);
 
-                                databaseReference.child(listaDispositivos.get(0).getId()).setValue(dispositivo)
+                                FirebaseDatabase.getInstance().getReference().child("dispositivos").child(listaDispositivos.get(0).getId())
+                                        .child("visible").setValue(false)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
@@ -136,8 +136,6 @@ public class DetallesDispositivo extends AppCompatActivity {
                                                 Log.d("registro", "DISPOSITIVO NO GUARDADO - " + e.getMessage());
                                             }
                                         });
-
-
                             }
                         });
                 builder.setNegativeButton("Cancelar",

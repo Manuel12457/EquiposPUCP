@@ -11,8 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_weight="1"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal">
 
         <TextView
@@ -38,7 +37,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_weight="1"
         android:gravity="center"
         android:text="Hecha por: \nDocente 20180177"
         android:textSize="20sp" />
@@ -48,7 +46,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_weight="1"
         android:gravity="center"
         android:text="Fecha y hora de reserva:\n21/10/2022 13:44"
         android:textSize="20sp" />
@@ -57,8 +54,7 @@
         android:id="@+id/dispositivoReserva_detalle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_weight="1"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:text="Dispositivo a reservar:\nCelular Samsung"
         android:textSize="20sp" />
@@ -67,7 +63,6 @@
         android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="Motivo:"
         android:textSize="16sp" />
 
@@ -76,75 +71,76 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_weight="1"
+        android:layout_marginBottom="16dp"
         android:text="He sufrido un robo el dia de ayer al salir de la universidad. Necesito un celular para poder atender correos llamadas telefónicas mientras carezco de celular "
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/cursoReserva_detalle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_weight="1"
         android:gravity="center"
         android:text="Curso: 1IEE04"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/tiempoReserva_detalle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_weight="1"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:text="Tiempo de reserva: 5 dias"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="Programas a instalar"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/programasReserva_detalle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_weight="1"
+        android:layout_marginBottom="24dp"
         android:text="Gmail\nWhatsapp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/textView17"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_weight="1"
         android:gravity="center"
         android:text="DNI del usuario"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:visibility="visible" />
 
     <ImageView
         android:id="@+id/dniUsuario_detalleReserva"
         android:layout_width="250dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        android:layout_weight="1"
+        android:layout_marginBottom="24dp"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
         app:srcCompat="@drawable/ic_image" />
 
     <TextView
         android:id="@+id/textView18"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:text="Detalles adicionales:"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/detallesAdicionalesReserva_detalle"
@@ -152,24 +148,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="16dp"
-        android:layout_weight="1"
         android:text="Sin detalles adicionales"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/textView20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_weight="1"
         android:text="Recojo del dispositivo"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="gone" />
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="350dp"
         android:layout_marginBottom="16dp"
-        android:layout_weight="1" />
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -250,11 +250,9 @@ public class ReservasUsuarioFragment extends Fragment {
 
                 if (listaReservas.isEmpty()) {
                     recyclerView.setVisibility(View.INVISIBLE);
-                    spinnerReservas.setVisibility(View.INVISIBLE);
                     noreservas.setVisibility(View.VISIBLE);
                 } else {
                     recyclerView.setVisibility(View.VISIBLE);
-                    spinnerReservas.setVisibility(View.VISIBLE);
                     noreservas.setVisibility(View.INVISIBLE);
                 }
                 adapterUsuario.notifyDataSetChanged();

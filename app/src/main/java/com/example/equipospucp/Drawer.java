@@ -98,7 +98,7 @@ public class Drawer extends AppCompatActivity implements NavigationView.OnNaviga
                                 nav_Menu.findItem(R.id.reservations_item).setVisible(false);
 
                                 navRolUsuario.setText("");
-                                navCodigoUsuario.setText(usuario.getRol());
+                                navCodigoUsuario.setText("Administrador");
                                 //COLOCAR AQUI LA IMAGEN
 
                                 getSupportActionBar().setTitle("Perfil");

@@ -51,14 +51,4 @@
         app:layout_constraintStart_toStartOf="@+id/btn_iniSesion"
         app:layout_constraintTop_toBottomOf="@+id/btn_iniSesion" />
 
-    <Button
-        android:id="@+id/btn_prueba"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
-        android:onClick="hacerPrueba"
-        android:text="PROBAR FOTO BLUR"
-        app:layout_constraintEnd_toEndOf="@+id/btn_registro"
-        app:layout_constraintStart_toStartOf="@+id/btn_registro"
-        app:layout_constraintTop_toBottomOf="@+id/btn_registro" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:gravity="center"
-                android:text="Hecha por:\nAlumno 20190133"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +34,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="Dispositivo a reservar:\nCelular Samsung"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/tvAlumno_Reserva"
                 app:layout_constraintStart_toStartOf="@+id/tvAlumno_Reserva"
@@ -64,7 +62,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/inputDireccionReserva"
+                android:id="@+id/inputCurso_Reserva"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="Curso"
@@ -96,7 +94,6 @@
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:tag="-1"
-                    android:onClick="cambiarDias"
                     app:srcCompat="@drawable/ic_minus" />
 
                 <TextView
@@ -118,7 +115,6 @@
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:tag="1"
-                    android:onClick="cambiarDias"
                     app:srcCompat="@drawable/ic_add" />
 
             </LinearLayout>
@@ -130,9 +126,9 @@
                 android:layout_marginTop="8dp"
                 android:text="Tiempo de reserva (dias)"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="@+id/inputDireccionReserva"
-                app:layout_constraintStart_toStartOf="@+id/inputDireccionReserva"
-                app:layout_constraintTop_toBottomOf="@+id/inputDireccionReserva" />
+                app:layout_constraintEnd_toEndOf="@+id/inputCurso_Reserva"
+                app:layout_constraintStart_toStartOf="@+id/inputCurso_Reserva"
+                app:layout_constraintTop_toBottomOf="@+id/inputCurso_Reserva" />
 
             <TextView
                 android:id="@+id/textView15"
@@ -171,7 +167,7 @@
                 android:id="@+id/inputProgramas_Reserva"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:hint="Programas a instalar"
                 android:visibility="visible"
                 app:counterEnabled="true"

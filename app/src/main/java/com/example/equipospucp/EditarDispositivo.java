@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.equipospucp.Adapters.ImagenesEdicionDispositivoAdapter;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.Dispositivo;
@@ -592,7 +593,7 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
                                     }
                                 }
                                 Log.d("registro", "DISPOSITIVO GUARDADO");
-                                Intent intent = new Intent(EditarDispositivo.this, Drawer.class);
+                                Intent intent = new Intent(EditarDispositivo.this, DetallesDispositivo.class);
                                 intent.putExtra("exito", "El dispositivo se ha editado exitosamente");
                                 startActivity(intent);
 
@@ -681,7 +682,9 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.custom_dialog_zoom);
         ImageView imagenDialog = dialog.findViewById(R.id.imageView2);
-        imagenDialog.setImageURI(listaImagenes.get(position));
+        Glide.with(this)
+                .load(listaImagenes.get(position))
+                .into(imagenDialog);
         dialog.show();
     }
 }

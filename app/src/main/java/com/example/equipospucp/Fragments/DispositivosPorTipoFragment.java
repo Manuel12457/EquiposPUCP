@@ -19,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.equipospucp.Adapters.ListaDispositivoAdapter;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.Dispositivo;
+import com.example.equipospucp.DTOs.Usuario;
 import com.example.equipospucp.R;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +48,9 @@ public class DispositivosPorTipoFragment extends Fragment {
     TextInputLayout spinnera;
     TextView noregistro;
 
+    Usuario usuario;
     Boolean pestaniaOtros;
+    boolean esUsuarioTI = false;
 
     @Nullable
     @Override
@@ -88,6 +92,29 @@ public class DispositivosPorTipoFragment extends Fragment {
             }
         });
 
+        FirebaseDatabase.getInstance().getReference("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        System.out.println("ONDATACHANGE - AFUERA DEL IF");
+                        if (snapshot.exists()) { //Nodo referente existe
+                            usuario = snapshot.getValue(Usuario.class);
+                            if (usuario.getRol().equals("Usuario TI")) {
+                                esUsuarioTI = true;
+                                valueEventListener = databaseReference.addValueEventListener(new DispositivosPorTipoFragment.listener());
+                            } else {
+                                valueEventListener = databaseReference.addValueEventListener(new DispositivosPorTipoFragment.listener());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        System.out.println("ONCANCELLED");
+                        Log.e("msg", "Error onCancelled", error.toException());
+                    }
+                });
+
         return view;
     }
 
@@ -104,24 +131,40 @@ public class DispositivosPorTipoFragment extends Fragment {
                     dispositivoDetalle.setDispositivoDto(dispositivo);
                     dispositivoDetalle.setId(ds.getKey());
 
-                    if (pestaniaOtros) {
-                        if (!dispositivo.getTipo().equals("Laptop") && !dispositivo.getTipo().equals("Monitor") && !dispositivo.getTipo().equals("Celular") && !dispositivo.getTipo().equals("Tablet") && dispositivo.getVisible()) {
-                            listaDispositivos.add(dispositivoDetalle);
-                        }
-                    } else {
-                        if (dispositivo.getTipo().equals(tipo) && dispositivo.getVisible()) {
-                            listaDispositivos.add(dispositivoDetalle);
+
+                    if (dispositivo.getVisible()) {
+                        if (!esUsuarioTI) {
+                            if (dispositivo.getStock() != 0) {
+                                if (pestaniaOtros) {
+                                    if (!dispositivo.getTipo().equals("Laptop") && !dispositivo.getTipo().equals("Monitor") && !dispositivo.getTipo().equals("Celular") && !dispositivo.getTipo().equals("Tablet") && dispositivo.getVisible()) {
+                                        listaDispositivos.add(dispositivoDetalle);
+                                    }
+                                } else {
+                                    if (dispositivo.getTipo().equals(tipo) && dispositivo.getVisible()) {
+                                        listaDispositivos.add(dispositivoDetalle);
+                                    }
+                                }
+                            }
+                        } else {
+                            if (pestaniaOtros) {
+                                if (!dispositivo.getTipo().equals("Laptop") && !dispositivo.getTipo().equals("Monitor") && !dispositivo.getTipo().equals("Celular") && !dispositivo.getTipo().equals("Tablet") && dispositivo.getVisible()) {
+                                    listaDispositivos.add(dispositivoDetalle);
+                                }
+                            } else {
+                                if (dispositivo.getTipo().equals(tipo) && dispositivo.getVisible()) {
+                                    listaDispositivos.add(dispositivoDetalle);
+                                }
+                            }
                         }
                     }
+
                 }
 
                 if (listaDispositivos.isEmpty()) {
                     recyclerView.setVisibility(View.INVISIBLE);
-                    spinnera.setVisibility(View.INVISIBLE);
                     noregistro.setVisibility(View.VISIBLE);
                 } else {
                     recyclerView.setVisibility(View.VISIBLE);
-                    spinnera.setVisibility(View.VISIBLE);
                     noregistro.setVisibility(View.INVISIBLE);
                 }
                 adapter.notifyDataSetChanged();

@@ -70,7 +70,7 @@ public class ListaReservasUsuarioAdapter extends RecyclerView.Adapter<ListaReser
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             Dispositivo dispositivo = snapshot.getValue(Dispositivo.class);
-                            holder.textView_inforeserva_reservausuario.setText("Reserva: " + dispositivo.getTipo() + " " + dispositivo.getMarca() +"\nTiempo de resesrva: " + reservaDto.getReserva().getTiempoReserva() + " días");
+                            holder.textView_inforeserva_reservausuario.setText("Reserva: " + dispositivo.getTipo() + " " + dispositivo.getMarca() +"\nTiempo de reserva: " + reservaDto.getReserva().getTiempoReserva() + " días");
                         }
                     }
 

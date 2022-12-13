@@ -37,8 +37,7 @@
             android:exported="false" />
         <activity
             android:name=".DetallesDispositivo"
-            android:exported="false"
-            android:parentActivityName=".Drawer" />
+            android:exported="false" />
         <activity
             android:name=".EditarDispositivo"
             android:exported="false"

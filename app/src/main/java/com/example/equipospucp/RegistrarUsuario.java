@@ -42,7 +42,6 @@ public class RegistrarUsuario extends AppCompatActivity {
     ArrayList<String> listaCorreosRegistrados = new ArrayList<>();
 
     Button btn;
-    CircularProgressIndicator circularProgressIndicator;
 
     boolean codigoValido = true;
     boolean correoValido = true;
@@ -63,7 +62,6 @@ public class RegistrarUsuario extends AppCompatActivity {
         getSupportActionBar().setTitle("Registro de usuario");
 
         btn = findViewById(R.id.btn_registrarseForm);
-        circularProgressIndicator = findViewById(R.id.idProgress);
 
         firebaseAuth = firebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -263,9 +261,6 @@ public class RegistrarUsuario extends AppCompatActivity {
 
     public void validarRegistro(View view) {
 
-        btn.setEnabled(false);
-        circularProgressIndicator.setVisibility(View.VISIBLE);
-
         TextInputLayout codigo = findViewById(R.id.inputCodigo_registro);
         TextInputLayout correo = findViewById(R.id.inputCorreo_registro);
         TextInputLayout password = findViewById(R.id.inputPassword_registro);
@@ -373,8 +368,6 @@ public class RegistrarUsuario extends AppCompatActivity {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.d("registro", "USUARIO NO GUARDADO - " + e.getMessage());
-                                        btn.setEnabled(true);
-                                        circularProgressIndicator.setVisibility(View.GONE);
                                     }
                                 });
 
@@ -389,22 +382,15 @@ public class RegistrarUsuario extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                btn.setEnabled(true);
-                                circularProgressIndicator.setVisibility(View.GONE);
                                 Log.d("task", "ERROR EN ENVIO DE CORREO DE VERIFICACION - " + e.getMessage());
                             }
                         });
 
                     } else {
                         Log.d("task", "ERROR EN REGISTRO - " + task.getException().getMessage());
-                        btn.setEnabled(true);
-                        circularProgressIndicator.setVisibility(View.GONE);
                     }
                 }
             });
-        } else {
-            btn.setEnabled(true);
-            circularProgressIndicator.setVisibility(View.GONE);
         }
     }
 

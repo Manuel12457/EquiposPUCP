@@ -1,9 +1,12 @@
 package com.example.equipospucp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -12,21 +15,30 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.equipospucp.DTOs.Dispositivo;
 import com.example.equipospucp.DTOs.DispositivoDetalleDto;
 import com.example.equipospucp.DTOs.Reserva;
+import com.example.equipospucp.DTOs.Usuario;
+import com.example.equipospucp.Fragments.DispositivosFragment;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -82,6 +94,7 @@ public class NuevaReserva extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_reserva);
+        getSupportActionBar().setTitle("Nueva reserva");
 
         // Se mapean los elementos de firebase
         auth = FirebaseAuth.getInstance();
@@ -90,14 +103,49 @@ public class NuevaReserva extends AppCompatActivity {
 
         dispositivoDetalleDto = (DispositivoDetalleDto) getIntent().getSerializableExtra("dispositivo");
 
+        tvNombreAlumno = findViewById(R.id.tvAlumno_Reserva);
+        tvNombreDispositivo = findViewById(R.id.tvDispositivo_Reserva);
+        FirebaseDatabase.getInstance().getReference("usuarios").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        System.out.println("ONDATACHANGE - AFUERA DEL IF");
+                        if (snapshot.exists()) { //Nodo referente existe
+                            Usuario usuario = snapshot.getValue(Usuario.class);
+                            tvNombreAlumno.setText("Hecha por:\n" + usuario.getRol() + " " + usuario.getCodigo());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        System.out.println("ONCANCELLED");
+                        Log.e("msg", "Error onCancelled", error.toException());
+                    }
+                });
+        FirebaseDatabase.getInstance().getReference("dispositivos").child(dispositivoDetalleDto.getId())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        System.out.println("ONDATACHANGE - AFUERA DEL IF");
+                        if (snapshot.exists()) { //Nodo referente existe
+                            Dispositivo dispositivo = snapshot.getValue(Dispositivo.class);
+                            tvNombreDispositivo.setText("Dispositivo a reservar:\n" + dispositivo.getTipo() + " " + dispositivo.getMarca());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        System.out.println("ONCANCELLED");
+                        Log.e("msg", "Error onCancelled", error.toException());
+                    }
+                });
+
         // Se piden los permisos para la cámara
         if (checkSelfPermission(Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED){
             requestPermissions(new String[]{Manifest.permission.CAMERA},PERMISOS_CODE);
         }
 
         // Se mapean los diferentos elementos de la vista
-        tvNombreAlumno = findViewById(R.id.tvAlumno_Reserva);
-        tvNombreDispositivo = findViewById(R.id.tvDispositivo_Reserva);
         tvNumDias = findViewById(R.id.tvDias_Reserva);
 
         inputMotivo = findViewById(R.id.inputMotivo_Reserva);
@@ -225,14 +273,6 @@ public class NuevaReserva extends AppCompatActivity {
         }
     }
 
-//    public void cambiarDias(View view){
-//        Integer nuevoDia = Integer.parseInt(tvNumDias.getText().toString()) + (Integer) view.getTag();
-//
-//        if (nuevoDia>=1 || nuevoDia<=30){
-//            tvNumDias.setText(nuevoDia.toString());
-//        }
-//    }
-
     public void hacerReserva(View view){
         String motivo = inputMotivo.getEditText().getText().toString().trim();
         String curso = inputCurso.getEditText().getText().toString().trim();
@@ -267,10 +307,18 @@ public class NuevaReserva extends AppCompatActivity {
         imgRef.child(nombre).putBytes(baos.toByteArray()).addOnSuccessListener(taskSnapshot -> {
             ref.push().setValue(reserva).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Intent intent = new Intent(NuevaReserva.this, Drawer.class);
-                    intent.putExtra("exito", "La reserva se ha realizado con éxito");
-                    startActivity(intent);
-                    finish();
+
+                    FirebaseDatabase.getInstance().getReference().child("dispositivos").child(dispositivoDetalleDto.getId())
+                            .child("stock").setValue(dispositivoDetalleDto.getDispositivoDto().getStock()-1)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Intent intent = new Intent(NuevaReserva.this, Drawer.class);
+                                    intent.putExtra("exito", "La reserva se ha realizado con éxito");
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
                 } else {
                     Snackbar.make(findViewById(R.id.activity_nueva_reserva), task.getException().getMessage() ,Snackbar.LENGTH_LONG).show();
                     //Toast.makeText(NuevaReserva.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -299,18 +347,66 @@ public class NuevaReserva extends AppCompatActivity {
             valido = false;
         }
         if (programas.equals("")){
-            inputProgramas.setError("Debe especificar una lista de programas");
+            inputProgramas.setError("Ingrese una lista de los programas que deben instalarse");
             valido = false;
         }
         if (detalles.equals("")){
-            inputMotivo.setError("Deben especificarse detalles adcionales del ispositivvo");
+            inputDetalles.setError("Ingrese detalles adicionales de su reserva");
             valido = false;
         }
         if (!conFoto){
-            Toast.makeText(NuevaReserva.this, "Debe ingresar una foto para continuar con la reservas", Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(R.id.activity_nueva_reserva), "Debe ingresar una foto de su DNI para realizar su reserva", Snackbar.LENGTH_LONG).show();
             valido = false;
         }
 
         return valido;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NuevaReserva.this);
+                builder.setMessage("¿Volver a la pantalla anterior? No se realizará su reserva");
+                builder.setPositiveButton("Aceptar",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(NuevaReserva.this,Drawer.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                builder.setNegativeButton("Cancelar",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                builder.show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(NuevaReserva.this);
+        builder.setMessage("¿Volver a la pantalla anterior? No se realizará su reserva");
+        builder.setPositiveButton("Aceptar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(NuevaReserva.this,Drawer.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+        builder.setNegativeButton("Cancelar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        builder.show();
+    }
+
 }
