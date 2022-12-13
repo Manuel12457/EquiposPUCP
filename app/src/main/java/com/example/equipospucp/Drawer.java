@@ -88,6 +88,7 @@ public class Drawer extends AppCompatActivity implements NavigationView.OnNaviga
                                 nav_Menu.findItem(R.id.devices_item).setVisible(false);
                                 nav_Menu.findItem(R.id.reservations_item).setVisible(false);
                                 nav_Menu.findItem(R.id.reservationsUser_item).setVisible(false);
+                                nav_Menu.findItem(R.id.estadisticas_item).setVisible(false);
 
                                 navRolUsuario.setText("");
                                 navCodigoUsuario.setText("Administrador");
