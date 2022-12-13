@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.equipospucp.DTOs.Usuario;
+import com.example.equipospucp.config.Helper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,6 +39,7 @@ public class NuevoUsuarioTI extends AppCompatActivity {
     DatabaseReference databaseReferenceCorreos;
     ValueEventListener valueEventListener;
     ArrayList<String> listaCorreosRegistrados = new ArrayList<>();
+    Helper helper;
 
     FloatingActionButton fab;
     CircularProgressIndicator circularProgressIndicator;
@@ -267,6 +269,11 @@ public class NuevoUsuarioTI extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             Log.d("task", "EXITO EN REGISTRO");
                                             Log.d("task", "EXITO EN ENVIO DE CORREO DE VERIFICACION");
+                                            helper.setContext(NuevoUsuarioTI.this);
+                                            helper.setTo(correo.getEditText().getText().toString());
+                                            helper.setSubject("Bienvenido a la plataforma de equipos PUCP");
+                                            helper.setBody("Usted ha sido registrado con las siguientes credenciales\n"+"correo: "+correo.getEditText().getText().toString()+"\n"+"contraseña: 123456\n"+"Por favor ingrese a su carpeta span y valide su cuenta!");
+                                            helper.sendEmail();
                                             Intent intent = new Intent(NuevoUsuarioTI.this, Drawer.class);
                                             intent.putExtra("exito", "Se ha enviado un correo para la verificación de la cuenta del nuevo usuario TI");
                                             intent.putExtra("accion", "Lista usuarios TI");
