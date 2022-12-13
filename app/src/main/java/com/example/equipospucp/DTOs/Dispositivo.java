@@ -10,7 +10,7 @@ public class Dispositivo implements Serializable {
     private String caracteristicas;
     private String incluye;
     private Integer stock;
-    private Boolean visible;
+    private boolean visible;
 
     public String getFoto() {
         return foto;

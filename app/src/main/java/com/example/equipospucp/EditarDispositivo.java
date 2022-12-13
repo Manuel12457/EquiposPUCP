@@ -497,7 +497,7 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
         if (listaImagenes.size()>=3) {
             cantidadFotosValido = true;
         } else {
-            Snackbar.make(view.findViewById(R.id.activity_editar_dispositivo), "Debe seleccionar un mínimo de 3 imágenes", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.activity_editar_dispositivo), "Debe seleccionar un mínimo de 3 imágenes", Snackbar.LENGTH_LONG).show();
             cantidadFotosValido = false;
         }
 
@@ -522,7 +522,7 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
 
             //AQUI NO OLVIDARSE DE LA SUBIDA DE LAS IMAGENES DE LA LISTA DE IMAGENES
             if (accion.equals("nuevo")) {
-                String key = databaseReference.push().getKey();
+                String key = FirebaseDatabase.getInstance().getReference().child("imagenes").push().getKey();
                 for (Uri imageUri: listaImagenes) {
                     if (imageUri != null){
                         String[] path= imageUri.toString().split("/");
@@ -532,7 +532,7 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
                             HashMap<String,String> map = new HashMap<>();
                             map.put("dispositivo",key);
                             map.put("imagen",filename);
-                            databaseReference.child("imagenes").push().setValue(map);
+                            FirebaseDatabase.getInstance().getReference().child("imagenes").push().setValue(map);
                         });
                     }
                 }
@@ -559,7 +559,7 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
                             @Override
                             public void onSuccess(Void unused) {
                                 //Eliminar Todas las fotos en database
-                                databaseReference.child("imagenes").addValueEventListener(new ValueEventListener() {
+                                FirebaseDatabase.getInstance().getReference().child("imagenes").addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         for (DataSnapshot children : snapshot.getChildren()){
@@ -570,7 +570,7 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
                                             if (image.getDispositivo().equals(dispositivoDetalleDto.getId())){
                                                 //Se procede a eliminar la imagen
                                                 storageReference.child("img/"+image.getImagen()).delete();
-                                                databaseReference.child("imagenes").child(children.getKey()).removeValue();
+                                                FirebaseDatabase.getInstance().getReference().child("imagenes").child(children.getKey()).removeValue();
                                             }
                                         }
                                         Toast.makeText(EditarDispositivo.this,"Imagenes eliminadas se procedera a subir las nuevsa imagenes",Toast.LENGTH_SHORT);
@@ -588,12 +588,12 @@ public class EditarDispositivo extends AppCompatActivity implements ImagenesEdic
                                             HashMap<String,String> map = new HashMap<>();
                                             map.put("dispositivo",dispositivoDetalleDto.getId());
                                             map.put("imagen",filename);
-                                            databaseReference.child("imagenes").push().setValue(map);
+                                            FirebaseDatabase.getInstance().getReference().child("imagenes").push().setValue(map);
                                         });
                                     }
                                 }
                                 Log.d("registro", "DISPOSITIVO GUARDADO");
-                                Intent intent = new Intent(EditarDispositivo.this, DetallesDispositivo.class);
+                                Intent intent = new Intent(EditarDispositivo.this, Drawer.class);
                                 intent.putExtra("exito", "El dispositivo se ha editado exitosamente");
                                 startActivity(intent);
 
