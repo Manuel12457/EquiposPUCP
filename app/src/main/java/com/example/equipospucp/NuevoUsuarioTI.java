@@ -283,13 +283,15 @@ public class NuevoUsuarioTI extends AppCompatActivity {
                                             String url = "http://ec2-52-207-211-253.compute-1.amazonaws.com/api/enviarCorreo";
                                             JSONObject jsonObject = new JSONObject();
                                             try {
+                                                System.out.println(correo.getEditText().getText().toString());
                                                 jsonObject.put("to",correo.getEditText().getText().toString());
                                                 jsonObject.put("subject","Bienvenido a la plataforma de equipos PUCP");
+                                                //jsonObject.put("body","prueba");
                                                 jsonObject.put("body","Usted ha sido registrado con las siguientes credenciales\n"+"correo: "+correo.getEditText().getText().toString()+"\n"+"contraseña: 123456\n"+"Por favor ingrese a su carpeta span y valide su cuenta!");
                                             }catch (JSONException e){
                                                 System.out.println(e);
                                             }
-                                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, jsonObject, new Response.Listener<JSONObject>() {
+                                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
                                                 @Override
                                                 public void onResponse(JSONObject response) {
                                                     Toast.makeText(NuevoUsuarioTI.this,"Peticion exitosa",Toast.LENGTH_SHORT).show();
@@ -298,6 +300,7 @@ public class NuevoUsuarioTI extends AppCompatActivity {
                                                 @Override
                                                 public void onErrorResponse(VolleyError error) {
                                                     Toast.makeText(NuevoUsuarioTI.this,"Peticion fallida",Toast.LENGTH_SHORT).show();
+                                                    System.out.println(error.getMessage());
                                                 }
                                             });
                                             queue.add(jsonObjectRequest);
